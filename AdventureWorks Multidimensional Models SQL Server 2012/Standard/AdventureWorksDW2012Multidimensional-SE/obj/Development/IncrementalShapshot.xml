@@ -1,0 +1,229 @@
+﻿<DeploymentSnapshot xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ddl2="http://schemas.microsoft.com/analysisservices/2003/engine/2" xmlns:ddl2_2="http://schemas.microsoft.com/analysisservices/2003/engine/2/2" xmlns:ddl100_100="http://schemas.microsoft.com/analysisservices/2008/engine/100/100" xmlns:ddl200="http://schemas.microsoft.com/analysisservices/2010/engine/200" xmlns:ddl200_200="http://schemas.microsoft.com/analysisservices/2010/engine/200/200" xmlns:ddl300="http://schemas.microsoft.com/analysisservices/2011/engine/300" xmlns:ddl300_300="http://schemas.microsoft.com/analysisservices/2011/engine/300/300" xmlns:ddl400="http://schemas.microsoft.com/analysisservices/2012/engine/400" xmlns:ddl400_400="http://schemas.microsoft.com/analysisservices/2012/engine/400/400" xmlns:dwd="http://schemas.microsoft.com/DataWarehouse/Designer/1.0">
+  <Target>
+    <Database>AdventureWorksDW2012Multidimensional-SE</Database>
+    <Server>vinweblaptop</Server>
+    <ConnectionString>DataSource=vinweblaptop;Timeout=0</ConnectionString>
+  </Target>
+  <Options>
+    <TransactionalDeployment>false</TransactionalDeployment>
+    <PartitionDeployment>DeployPartitions</PartitionDeployment>
+    <RoleDeployment>DeployRolesRetainMembers</RoleDeployment>
+    <ProcessingOption>DoNotProcess</ProcessingOption>
+    <OutputScript></OutputScript>
+    <ImpactAnalysisFile></ImpactAnalysisFile>
+    <ConfigurationSettingsDeployment>Deploy</ConfigurationSettingsDeployment>
+    <OptimizationSettingsDeployment>Deploy</OptimizationSettingsDeployment>
+    <WriteBackTableCreation>UseExisting</WriteBackTableCreation>
+  </Options>
+  <Snapshot>
+    <ObjectSnapshots>
+      <ObjectSnapshot>
+        <Type>Microsoft.AnalysisServices.RelationalDataSource</Type>
+        <TimeStamp>6lkETm5+1jiSgNP0TXGv12jCRz0=11/12/2014 1:23:24 PM3/8/2012 8:39:46 AM</TimeStamp>
+        <ID>
+          <String>Adventure Works DW</String>
+        </ID>
+      </ObjectSnapshot>
+      <ObjectSnapshot>
+        <Type>Microsoft.AnalysisServices.DataSourceView</Type>
+        <TimeStamp>PZ/Py15/5Ocrtq8jKb2SsEWFXGw=11/12/2014 1:14:38 PM3/8/2012 8:39:46 AM</TimeStamp>
+        <ID>
+          <String>Adventure Works DW</String>
+        </ID>
+      </ObjectSnapshot>
+      <ObjectSnapshot>
+        <Type>Microsoft.AnalysisServices.DataSourceView</Type>
+        <TimeStamp>TRqdHc2D8zAZRrqvnFhJTf1poYI=3/8/2012 8:39:46 AM3/8/2012 8:39:46 AM</TimeStamp>
+        <ID>
+          <String>Clustered Customers_DMDSV</String>
+        </ID>
+      </ObjectSnapshot>
+      <ObjectSnapshot>
+        <Type>Microsoft.AnalysisServices.Dimension</Type>
+        <TimeStamp>3n+91o1sXaf/0mn75hHwraQyiIY=3/8/2012 8:39:46 AM3/8/2012 8:39:46 AM</TimeStamp>
+        <ID>
+          <String>Clustered Customers</String>
+        </ID>
+      </ObjectSnapshot>
+      <ObjectSnapshot>
+        <Type>Microsoft.AnalysisServices.Dimension</Type>
+        <TimeStamp>K9GQ8iK4PXs4FTO/HkNPD9DdleI=3/8/2012 8:39:46 AM3/8/2012 8:39:46 AM</TimeStamp>
+        <ID>
+          <String>Dim Customer</String>
+        </ID>
+      </ObjectSnapshot>
+      <ObjectSnapshot>
+        <Type>Microsoft.AnalysisServices.Dimension</Type>
+        <TimeStamp>eslCTrPQcxAUDmtv77duQOlKyz8=3/8/2012 8:39:46 AM3/8/2012 8:39:46 AM</TimeStamp>
+        <ID>
+          <String>Dim Time</String>
+        </ID>
+      </ObjectSnapshot>
+      <ObjectSnapshot>
+        <Type>Microsoft.AnalysisServices.Dimension</Type>
+        <TimeStamp>sx9G8cbBhp3wgWeT6/ju6ZNMkj4=3/8/2012 8:39:46 AM3/8/2012 8:39:46 AM</TimeStamp>
+        <ID>
+          <String>Dim Employee</String>
+        </ID>
+      </ObjectSnapshot>
+      <ObjectSnapshot>
+        <Type>Microsoft.AnalysisServices.Dimension</Type>
+        <TimeStamp>cZY+/LU6fQcjZc/3X2sA+dqsy2I=3/8/2012 8:39:46 AM3/8/2012 8:39:46 AM</TimeStamp>
+        <ID>
+          <String>Dim Geography</String>
+        </ID>
+      </ObjectSnapshot>
+      <ObjectSnapshot>
+        <Type>Microsoft.AnalysisServices.Dimension</Type>
+        <TimeStamp>n84eaA369kh8ueoHQXviJVRg+X8=3/8/2012 8:39:46 AM3/8/2012 8:39:46 AM</TimeStamp>
+        <ID>
+          <String>Fact Internet Sales</String>
+        </ID>
+      </ObjectSnapshot>
+      <ObjectSnapshot>
+        <Type>Microsoft.AnalysisServices.Dimension</Type>
+        <TimeStamp>2nMsHw9XN2c8QfwWi19K1RUh3xs=3/8/2012 8:39:46 AM3/8/2012 8:39:46 AM</TimeStamp>
+        <ID>
+          <String>Dim Product</String>
+        </ID>
+      </ObjectSnapshot>
+      <ObjectSnapshot>
+        <Type>Microsoft.AnalysisServices.Dimension</Type>
+        <TimeStamp>N9p8dQfJ9Dy/L5shedOYaGMBA50=3/8/2012 8:39:46 AM3/8/2012 8:39:46 AM</TimeStamp>
+        <ID>
+          <String>Dim Promotion</String>
+        </ID>
+      </ObjectSnapshot>
+      <ObjectSnapshot>
+        <Type>Microsoft.AnalysisServices.Dimension</Type>
+        <TimeStamp>Uv1hruv9a6CuJKsB87GuC2ZR+AA=3/8/2012 8:39:46 AM3/8/2012 8:39:46 AM</TimeStamp>
+        <ID>
+          <String>Fact Reseller Sales</String>
+        </ID>
+      </ObjectSnapshot>
+      <ObjectSnapshot>
+        <Type>Microsoft.AnalysisServices.Dimension</Type>
+        <TimeStamp>eDdJB4FY39Yaibff2dwPCQA3YsI=3/8/2012 8:39:46 AM3/8/2012 8:39:46 AM</TimeStamp>
+        <ID>
+          <String>Dim Reseller</String>
+        </ID>
+      </ObjectSnapshot>
+      <ObjectSnapshot>
+        <Type>Microsoft.AnalysisServices.Dimension</Type>
+        <TimeStamp>3dgp8+hIca0z8UdHOYMyhP6Lwyo=3/8/2012 8:39:46 AM3/8/2012 8:39:46 AM</TimeStamp>
+        <ID>
+          <String>Fact Sales Summary</String>
+        </ID>
+      </ObjectSnapshot>
+      <ObjectSnapshot>
+        <Type>Microsoft.AnalysisServices.Dimension</Type>
+        <TimeStamp>BZJW6lC62CM44gVuV8veHKvN2Z4=3/8/2012 8:39:46 AM3/8/2012 8:39:46 AM</TimeStamp>
+        <ID>
+          <String>Dim Sales Reason</String>
+        </ID>
+      </ObjectSnapshot>
+      <ObjectSnapshot>
+        <Type>Microsoft.AnalysisServices.Dimension</Type>
+        <TimeStamp>apLXK7kVL36dwWE770ToVxckHBM=3/8/2012 8:39:46 AM3/8/2012 8:39:46 AM</TimeStamp>
+        <ID>
+          <String>Fact Sales Summary 1</String>
+        </ID>
+      </ObjectSnapshot>
+      <ObjectSnapshot>
+        <Type>Microsoft.AnalysisServices.Dimension</Type>
+        <TimeStamp>Jt6BxQ+Yev+ZDaxkHyAeMiDjhAo=3/8/2012 8:39:46 AM3/8/2012 8:39:46 AM</TimeStamp>
+        <ID>
+          <String>Dim Sales Territory</String>
+        </ID>
+      </ObjectSnapshot>
+      <ObjectSnapshot>
+        <Type>Microsoft.AnalysisServices.Dimension</Type>
+        <TimeStamp>Ay37uXcg40iHudGjeEMKUlTV408=3/8/2012 8:39:46 AM3/8/2012 8:39:46 AM</TimeStamp>
+        <ID>
+          <String>Dim Currency</String>
+        </ID>
+      </ObjectSnapshot>
+      <ObjectSnapshot>
+        <Type>Microsoft.AnalysisServices.Cube</Type>
+        <TimeStamp>YLJPUC7r2/vMHwmkKpR52M7mjOU=3/8/2012 8:39:46 AM3/8/2012 8:39:46 AMLwyvk90q7whY5vnbbygK81lQOII=3/8/2012 8:39:46 AM3/8/2012 8:39:46 AM</TimeStamp>
+        <ID>
+          <String>Adventure Works DW</String>
+        </ID>
+      </ObjectSnapshot>
+      <ObjectSnapshot>
+        <Type>Microsoft.AnalysisServices.Cube</Type>
+        <TimeStamp>z/Fvi1rune68WR7lEyCSwPYCpSY=3/8/2012 8:39:46 AM3/8/2012 8:39:46 AMxvFtQEbiDbs0ab3CjLK0F3vKMW4=3/8/2012 8:39:46 AM3/8/2012 8:39:46 AM</TimeStamp>
+        <ID>
+          <String>Adventure Works DW 1</String>
+        </ID>
+      </ObjectSnapshot>
+      <ObjectSnapshot>
+        <Type>Microsoft.AnalysisServices.MiningStructure</Type>
+        <TimeStamp>jtPhttKhVHC1wnUtcL4Sg4MY/fA=3/8/2012 8:39:46 AM3/8/2012 8:39:46 AM</TimeStamp>
+        <ID>
+          <String>Customer Clusters</String>
+        </ID>
+      </ObjectSnapshot>
+      <ObjectSnapshot>
+        <Type>Microsoft.AnalysisServices.MiningStructure</Type>
+        <TimeStamp>To6Lry9qTHjO4y3alhlNe1sfbTM=3/8/2012 8:39:46 AM3/8/2012 8:39:46 AM</TimeStamp>
+        <ID>
+          <String>Forecasting</String>
+        </ID>
+      </ObjectSnapshot>
+      <ObjectSnapshot>
+        <Type>Microsoft.AnalysisServices.MiningStructure</Type>
+        <TimeStamp>6LQwBvZU1pY5p2R2iVjhHjBznXI=3/8/2012 8:39:46 AM3/8/2012 8:39:46 AM</TimeStamp>
+        <ID>
+          <String>Market Basket</String>
+        </ID>
+      </ObjectSnapshot>
+      <ObjectSnapshot>
+        <Type>Microsoft.AnalysisServices.MiningStructure</Type>
+        <TimeStamp>6cSa5PqmX4ttBlmaome2inMY9kY=3/8/2012 8:39:46 AM3/8/2012 8:39:46 AM</TimeStamp>
+        <ID>
+          <String>Sequence Clustering</String>
+        </ID>
+      </ObjectSnapshot>
+      <ObjectSnapshot>
+        <Type>Microsoft.AnalysisServices.MiningStructure</Type>
+        <TimeStamp>+by4xHYXnEX1u6/EVcgGQ0X826o=11/12/2014 2:50:40 PM3/8/2012 8:39:46 AM</TimeStamp>
+        <ID>
+          <String>Targeted Mailing</String>
+        </ID>
+      </ObjectSnapshot>
+      <ObjectSnapshot>
+        <Type>Microsoft.AnalysisServices.MiningStructure</Type>
+        <TimeStamp>Ql7nDVD+I5/mbcqzqPHY382XyIk=11/12/2014 3:58:37 PM11/12/2014 3:58:36 PM</TimeStamp>
+        <ID>
+          <String>Time Series</String>
+        </ID>
+      </ObjectSnapshot>
+      <ObjectSnapshot>
+        <Type>Microsoft.AnalysisServices.MiningStructure</Type>
+        <TimeStamp>EaONTEV2+LEVoSRbK5VZYy1GVZo=11/13/2014 2:23:53 PM11/13/2014 2:23:53 PM</TimeStamp>
+        <ID>
+          <String>Orders Seq</String>
+        </ID>
+      </ObjectSnapshot>
+      <ObjectSnapshot>
+        <Type>Microsoft.AnalysisServices.MiningStructure</Type>
+        <TimeStamp>wvF19WCHw+LSyWX0zOSrXvwO+ow=11/14/2014 2:42:45 PM11/14/2014 2:42:45 PM</TimeStamp>
+        <ID>
+          <String>logisticMS</String>
+        </ID>
+      </ObjectSnapshot>
+    </ObjectSnapshots>
+    <DatabaseSnapshot>
+      <Type>Microsoft.AnalysisServices.Database</Type>
+      <TimeStamp>/x8nmEs+t55TSDOPm5xApOdQuh8=3/8/2012 8:39:46 AM3/8/2012 8:39:46 AM</TimeStamp>
+      <ID>
+        <String>AdventureWorksDW2012Multidimensional-SE</String>
+      </ID>
+    </DatabaseSnapshot>
+    <Granularity>Coarse</Granularity>
+  </Snapshot>
+  <AssemblyLocations />
+  <ProcessingComplete>true</ProcessingComplete>
+  <LastDeployed>2014-11-14T19:42:52.393333Z</LastDeployed>
+</DeploymentSnapshot>

@@ -1,0 +1,29 @@
+<AnalysisServicesUserConfiguration xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ddl2="http://schemas.microsoft.com/analysisservices/2003/engine/2" xmlns:ddl2_2="http://schemas.microsoft.com/analysisservices/2003/engine/2/2" xmlns:ddl100_100="http://schemas.microsoft.com/analysisservices/2008/engine/100/100" xmlns:ddl200="http://schemas.microsoft.com/analysisservices/2010/engine/200" xmlns:ddl200_200="http://schemas.microsoft.com/analysisservices/2010/engine/200/200" xmlns:ddl300="http://schemas.microsoft.com/analysisservices/2011/engine/300" xmlns:ddl300_300="http://schemas.microsoft.com/analysisservices/2011/engine/300/300" xmlns:ddl400="http://schemas.microsoft.com/analysisservices/2012/engine/400" xmlns:ddl400_400="http://schemas.microsoft.com/analysisservices/2012/engine/400/400" xmlns:dwd="http://schemas.microsoft.com/DataWarehouse/Designer/1.0">
+  <Configurations>
+    <Configuration>
+      <Name>Development</Name>
+      <Options>
+        <UserIDs>
+          <ConfigurationSetting>
+            <Id>Adventure Works DW</Id>
+            <Name>Adventure Works DW</Name>
+            <Value xsi:type="xsd:string">AQAAANCMnd8BFdERjHoAwE/Cl+sBAAAAlArDgibc60uYCPC2GnLNqwAAAAAmAAAAQQBkAHYAZQBuAHQAdQByAGUAIABXAG8AcgBrAHMAIABEAFcAAAAQZgAAAAEAACAAAAD+eiWEofIXn+Ux0lF8+WBT8G74rl2aDLsOWw+mfp5gAgAAAAAOgAAAAAIAACAAAAAqiAJDWJyzyCZWUuZuto79GjJrCSDCif+PCnG4icdEExAAAABFA8AF4i9T51TWjQ2thZmkQAAAAJS3vQG2SSRUR7h1jLSV+EYqbp6ggm6Ba9/WOXZwd/655aP/39npSYpKxMyilMPLmsjSSeD5u15toYE0xUXQirA=</Value>
+          </ConfigurationSetting>
+        </UserIDs>
+        <UserPasswords>
+          <ConfigurationSetting>
+            <Id>Adventure Works DW</Id>
+            <Name>Adventure Works DW</Name>
+            <Value xsi:type="xsd:string">AQAAANCMnd8BFdERjHoAwE/Cl+sBAAAAlArDgibc60uYCPC2GnLNqwAAAAAmAAAAQQBkAHYAZQBuAHQAdQByAGUAIABXAG8AcgBrAHMAIABEAFcAAAAQZgAAAAEAACAAAAASdaNIlE7Lm1szqrOHBRZtPcid+II+/6/y+3rgbaNwQAAAAAAOgAAAAAIAACAAAAC4R2HKzH1yTx5YewXQyXtOl5Vv3Wodv6wWu4eMmI80syAAAAB39kNSKfH3+uOb3GOTv5sTlTTw6VBlFr6nsOswovsSRUAAAAD/sU81mdLSDUCFrTvuB4R/zxrImsccFsEyK2koAKsIsNnYesRmJveWNURfJMuTQr7rlE4mPfwYJHZ6yGpRXypV</Value>
+          </ConfigurationSetting>
+        </UserPasswords>
+        <TargetServer>vinweblaptop</TargetServer>
+        <TargetDatabase>AdventureWorksDW2012Multidimensional-SE</TargetDatabase>
+        <StartObject>
+          <ObjectId></ObjectId>
+          <ObjectType>Current</ObjectType>
+        </StartObject>
+      </Options>
+    </Configuration>
+  </Configurations>
+</AnalysisServicesUserConfiguration>

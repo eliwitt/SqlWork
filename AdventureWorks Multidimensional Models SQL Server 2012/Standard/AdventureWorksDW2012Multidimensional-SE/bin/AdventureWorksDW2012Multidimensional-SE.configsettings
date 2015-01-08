@@ -1,0 +1,194 @@
+﻿<ConfigurationSettings xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ddl2="http://schemas.microsoft.com/analysisservices/2003/engine/2" xmlns:ddl2_2="http://schemas.microsoft.com/analysisservices/2003/engine/2/2" xmlns:ddl100_100="http://schemas.microsoft.com/analysisservices/2008/engine/100/100" xmlns:ddl200="http://schemas.microsoft.com/analysisservices/2010/engine/200" xmlns:ddl200_200="http://schemas.microsoft.com/analysisservices/2010/engine/200/200" xmlns:ddl300="http://schemas.microsoft.com/analysisservices/2011/engine/300" xmlns:ddl300_300="http://schemas.microsoft.com/analysisservices/2011/engine/300/300" xmlns:ddl400="http://schemas.microsoft.com/analysisservices/2012/engine/400" xmlns:ddl400_400="http://schemas.microsoft.com/analysisservices/2012/engine/400/400" xmlns:dwd="http://schemas.microsoft.com/DataWarehouse/Designer/1.0">
+  <Database>
+    <DataSources>
+      <DataSource>
+        <ID>Adventure Works DW</ID>
+        <ConnectionString>Provider=SQLNCLI11.1;Data Source=vinweblaptop;Persist Security Info=True;Password=;User ID=;Initial Catalog=AdventureWorksDW2012</ConnectionString>
+        <ImpersonationInfo>
+          <ImpersonationMode xmlns="http://schemas.microsoft.com/analysisservices/2003/engine">Default</ImpersonationMode>
+          <ImpersonationInfoSecurity xmlns="http://schemas.microsoft.com/analysisservices/2003/engine">Unchanged</ImpersonationInfoSecurity>
+        </ImpersonationInfo>
+      </DataSource>
+    </DataSources>
+    <Dimensions>
+      <Dimension>
+        <ID>Clustered Customers</ID>
+      </Dimension>
+      <Dimension>
+        <ID>Dim Customer</ID>
+      </Dimension>
+      <Dimension>
+        <ID>Dim Time</ID>
+      </Dimension>
+      <Dimension>
+        <ID>Dim Employee</ID>
+      </Dimension>
+      <Dimension>
+        <ID>Dim Geography</ID>
+      </Dimension>
+      <Dimension>
+        <ID>Fact Internet Sales</ID>
+      </Dimension>
+      <Dimension>
+        <ID>Dim Product</ID>
+      </Dimension>
+      <Dimension>
+        <ID>Dim Promotion</ID>
+      </Dimension>
+      <Dimension>
+        <ID>Fact Reseller Sales</ID>
+      </Dimension>
+      <Dimension>
+        <ID>Dim Reseller</ID>
+      </Dimension>
+      <Dimension>
+        <ID>Fact Sales Summary</ID>
+      </Dimension>
+      <Dimension>
+        <ID>Dim Sales Reason</ID>
+      </Dimension>
+      <Dimension>
+        <ID>Fact Sales Summary 1</ID>
+      </Dimension>
+      <Dimension>
+        <ID>Dim Sales Territory</ID>
+      </Dimension>
+      <Dimension>
+        <ID>Dim Currency</ID>
+      </Dimension>
+    </Dimensions>
+    <MiningStructures>
+      <MiningStructure>
+        <ID>Customer Clusters</ID>
+      </MiningStructure>
+      <MiningStructure>
+        <ID>Forecasting</ID>
+      </MiningStructure>
+      <MiningStructure>
+        <ID>Market Basket</ID>
+      </MiningStructure>
+      <MiningStructure>
+        <ID>Sequence Clustering</ID>
+      </MiningStructure>
+      <MiningStructure>
+        <ID>Targeted Mailing</ID>
+      </MiningStructure>
+      <MiningStructure>
+        <ID>Time Series</ID>
+      </MiningStructure>
+      <MiningStructure>
+        <ID>Orders Seq</ID>
+      </MiningStructure>
+      <MiningStructure>
+        <ID>logisticMS</ID>
+      </MiningStructure>
+    </MiningStructures>
+    <Cubes>
+      <Cube>
+        <ID>Adventure Works DW</ID>
+        <MeasureGroups>
+          <MeasureGroup>
+            <ID>Fact Internet Sales 1</ID>
+            <Partitions>
+              <Partition>
+                <ID>Internet_Sales</ID>
+              </Partition>
+            </Partitions>
+          </MeasureGroup>
+          <MeasureGroup>
+            <ID>Internet Orders</ID>
+            <Partitions>
+              <Partition>
+                <ID>Internet_Orders</ID>
+              </Partition>
+            </Partitions>
+          </MeasureGroup>
+          <MeasureGroup>
+            <ID>Fact Internet Sales</ID>
+            <Partitions>
+              <Partition>
+                <ID>Customer_Counts</ID>
+              </Partition>
+            </Partitions>
+          </MeasureGroup>
+          <MeasureGroup>
+            <ID>Fact Internet Sales Reason</ID>
+            <Partitions>
+              <Partition>
+                <ID>Internet_Sales_Reasons</ID>
+              </Partition>
+            </Partitions>
+          </MeasureGroup>
+          <MeasureGroup>
+            <ID>Fact Reseller Sales</ID>
+            <Partitions>
+              <Partition>
+                <ID>Reseller_Sales</ID>
+              </Partition>
+            </Partitions>
+          </MeasureGroup>
+          <MeasureGroup>
+            <ID>Reseller Orders</ID>
+            <Partitions>
+              <Partition>
+                <ID>Reseller_Orders</ID>
+              </Partition>
+            </Partitions>
+          </MeasureGroup>
+          <MeasureGroup>
+            <ID>Fact Sales Summary</ID>
+            <Partitions>
+              <Partition>
+                <ID>Total_Orders</ID>
+              </Partition>
+            </Partitions>
+          </MeasureGroup>
+          <MeasureGroup>
+            <ID>Sales Summary</ID>
+            <Partitions>
+              <Partition>
+                <ID>Total_Orders</ID>
+              </Partition>
+            </Partitions>
+          </MeasureGroup>
+          <MeasureGroup>
+            <ID>Fact Sales Quota</ID>
+            <Partitions>
+              <Partition>
+                <ID>Fact Sales Quota</ID>
+              </Partition>
+            </Partitions>
+          </MeasureGroup>
+        </MeasureGroups>
+        <Actions>
+          <Action>
+            <ID>Report Action</ID>
+            <ReportServer>Localhost</ReportServer>
+            <Path>ReportServer?/AdventureWorks Sample Reports/Sales Reason Comparisons</Path>
+          </Action>
+        </Actions>
+      </Cube>
+      <Cube>
+        <ID>Adventure Works DW 1</ID>
+        <MeasureGroups>
+          <MeasureGroup>
+            <ID>Internet Sales</ID>
+          </MeasureGroup>
+          <MeasureGroup>
+            <ID>Internet Orders</ID>
+          </MeasureGroup>
+          <MeasureGroup>
+            <ID>Internet Customers</ID>
+          </MeasureGroup>
+          <MeasureGroup>
+            <ID>Sales Reasons</ID>
+          </MeasureGroup>
+        </MeasureGroups>
+      </Cube>
+    </Cubes>
+    <DataSourceImpersonationInfo>
+      <ImpersonationMode xmlns="http://schemas.microsoft.com/analysisservices/2003/engine">Default</ImpersonationMode>
+      <ImpersonationInfoSecurity xmlns="http://schemas.microsoft.com/analysisservices/2003/engine">Unchanged</ImpersonationInfoSecurity>
+    </DataSourceImpersonationInfo>
+  </Database>
+</ConfigurationSettings>
