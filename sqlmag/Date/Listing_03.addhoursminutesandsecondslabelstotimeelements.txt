@@ -1,0 +1,16 @@
+DECLARE @date1 datetime
+             ,@date2 datetime
+             ,@result1 varchar(8)
+             ,@result2 varchar(30)
+
+SET @date1 = getdate() - (getdate() - '0:00:00')
+SET @date2 = getdate() - (getdate() - '5:30:00')
+SET @result1 = CONVERT(varchar(8), @date1 - @date2, 108)
+PRINT @result1
+SET @result2 = LEFT(@result1,2) + ' Hours ' + SUBSTRING(@result1,4,2) +
+' Minutes ' + SUBSTRING(@result1,7,2) + ' Seconds'
+
+PRINT @result2
+
+
+

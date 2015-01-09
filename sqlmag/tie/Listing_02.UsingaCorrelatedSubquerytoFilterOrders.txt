@@ -1,0 +1,8 @@
+Listing 2: Using a Correlated Subquery to Filter Orders
+SELECT EmployeeID, OrderID, CustomerID, ShipVia, OrderDate
+FROM Orders AS O1
+WHERE OrderDate =
+  (SELECT MAX(OrderDate)
+   FROM Orders AS O2
+   WHERE O2.EmployeeID = O1.EmployeeID)
+

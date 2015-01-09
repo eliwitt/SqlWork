@@ -1,0 +1,46 @@
+<orders>
+<Customers><CustomerId>BOTTM</CustomerId><CustomerName>Elizabeth Lincoln</CustomerName><Address>23 Tsawassen Blvd.</Address><City>Tsawassen</City><State>BC</State><PostalCode>T2F 8M4</PostalCode></Customers>
+<Order><OrderId>10389</OrderId><CustomerId>BOTTM</CustomerId><ShipTo>Bottom-Dollar Markets</ShipTo><ShipAddress>23 Tsawassen Blvd.</Address><ShipCity>Tsawassen</ShipCtiy><ShipState>BC</ShipState><ShipZip>T2F 8M4</ShipZip></Order>
+<OrderItems><OrderId>10389</OrderId><SKU>10</SKU><Price>24.80</Price><Qty>16</Qty></OrderItems>
+<OrderItems><OrderId>10389</OrderId><SKU>55</SKU><Price>19.20</Price><Qty>15</Qty></OrderItems>
+<OrderItems><OrderId>10389</OrderId><SKU>62</SKU><Price>39.40</Price><Qty>20</Qty></OrderItems>
+<OrderItems><OrderId>10389</OrderId><SKU>70</SKU><Price>12.00</Price><Qty>30</Qty></OrderItems>
+<Order><OrderId>10410</OrderId><CustomerId>BOTTM</CustomerId><ShipTo>Bottom-Dollar Markets</ShipTo><ShipAddress>23 Tsawassen Blvd.</Address><ShipCity>Tsawassen</ShipCtiy><ShipState>BC</ShipState><ShipZip>T2F 8M4</ShipZip></Order>
+<OrderItems><OrderId>10410</OrderId><SKU>33</SKU><Price>2.00</Price><Qty>49</Qty></OrderItems>
+<OrderItems><OrderId>10410</OrderId><SKU>59</SKU><Price>44.00</Price><Qty>16</Qty></OrderItems>
+<Order><OrderId>10411</OrderId><CustomerId>BOTTM</CustomerId><ShipTo>Bottom-Dollar Markets</ShipTo><ShipAddress>23 Tsawassen Blvd.</Address><ShipCity>Tsawassen</ShipCtiy><ShipState>BC</ShipState><ShipZip>T2F 8M4</ShipZip></Order>
+<OrderItems><OrderId>10411</OrderId><SKU>41</SKU><Price>7.70</Price><Qty>25</Qty></OrderItems>
+<OrderItems><OrderId>10411</OrderId><SKU>44</SKU><Price>15.50</Price><Qty>40</Qty></OrderItems>
+<OrderItems><OrderId>10411</OrderId><SKU>59</SKU><Price>44.00</Price><Qty>9</Qty></OrderItems>
+<Order><OrderId>10431</OrderId><CustomerId>BOTTM</CustomerId><ShipTo>Bottom-Dollar Markets</ShipTo><ShipAddress>23 Tsawassen Blvd.</Address><ShipCity>Tsawassen</ShipCtiy><ShipState>BC</ShipState><ShipZip>T2F 8M4</ShipZip></Order>
+<OrderItems><OrderId>10431</OrderId><SKU>17</SKU><Price>31.20</Price><Qty>50</Qty></OrderItems>
+<OrderItems><OrderId>10431</OrderId><SKU>40</SKU><Price>14.70</Price><Qty>50</Qty></OrderItems>
+<OrderItems><OrderId>10431</OrderId><SKU>47</SKU><Price>7.60</Price><Qty>30</Qty></OrderItems>
+</orders>
+<orders>
+<Customers><CustomerId>COMMI</CustomerId><CustomerName>Pedro Afonso</CustomerName><Address>Av. dos Lusíadas, 23</Address><City>Sao Paulo</City><State>SP</State><PostalCode>05432-043</PostalCode></Customers>
+<Order><OrderId>10290</OrderId><CustomerId>COMMI</CustomerId><ShipTo>Comércio Mineiro</ShipTo><ShipAddress>Av. dos Lusíadas, 23</Address><ShipCity>Sao Paulo</ShipCtiy><ShipState>SP</ShipState><ShipZip>05432-043</ShipZip></Order>
+<OrderItems><OrderId>10290</OrderId><SKU>5</SKU><Price>17.00</Price><Qty>20</Qty></OrderItems>
+<OrderItems><OrderId>10290</OrderId><SKU>29</SKU><Price>99.00</Price><Qty>15</Qty></OrderItems>
+<OrderItems><OrderId>10290</OrderId><SKU>49</SKU><Price>16.00</Price><Qty>15</Qty></OrderItems>
+<OrderItems><OrderId>10290</OrderId><SKU>77</SKU><Price>10.40</Price><Qty>10</Qty></OrderItems>
+<Order><OrderId>10466</OrderId><CustomerId>COMMI</CustomerId><ShipTo>Comércio Mineiro</ShipTo><ShipAddress>Av. dos Lusíadas, 23</Address><ShipCity>Sao Paulo</ShipCtiy><ShipState>SP</ShipState><ShipZip>05432-043</ShipZip></Order>
+<OrderItems><OrderId>10466</OrderId><SKU>11</SKU><Price>16.80</Price><Qty>10</Qty></OrderItems>
+<OrderItems><OrderId>10466</OrderId><SKU>46</SKU><Price>9.60</Price><Qty>5</Qty></OrderItems>
+<Order><OrderId>10494</OrderId><CustomerId>COMMI</CustomerId><ShipTo>Comércio Mineiro</ShipTo><ShipAddress>Av. dos Lusíadas, 23</Address><ShipCity>Sao Paulo</ShipCtiy><ShipState>SP</ShipState><ShipZip>05432-043</ShipZip></Order>
+<OrderItems><OrderId>10494</OrderId><SKU>56</SKU><Price>30.40</Price><Qty>30</Qty></OrderItems>
+</orders>
+<orders>
+<Customers><CustomerId>FAMIA</CustomerId><CustomerName>Aria Cruz</CustomerName><Address>Rua Orós, 92</Address><City>Sao Paulo</City><State>SP</State><PostalCode>05442-030</PostalCode></Customers>
+<Order><OrderId>10347</OrderId><CustomerId>FAMIA</CustomerId><ShipTo>Familia Arquibaldo</ShipTo><ShipAddress>Rua Orós, 92</Address><ShipCity>Sao Paulo</ShipCtiy><ShipState>SP</ShipState><ShipZip>05442-030</ShipZip></Order>
+<OrderItems><OrderId>10347</OrderId><SKU>25</SKU><Price>11.20</Price><Qty>10</Qty></OrderItems>
+<OrderItems><OrderId>10347</OrderId><SKU>39</SKU><Price>14.40</Price><Qty>50</Qty></OrderItems>
+<OrderItems><OrderId>10347</OrderId><SKU>40</SKU><Price>14.70</Price><Qty>4</Qty></OrderItems>
+<OrderItems><OrderId>10347</OrderId><SKU>75</SKU><Price>6.20</Price><Qty>6</Qty></OrderItems>
+<Order><OrderId>10386</OrderId><CustomerId>FAMIA</CustomerId><ShipTo>Familia Arquibaldo</ShipTo><ShipAddress>Rua Orós, 92</Address><ShipCity>Sao Paulo</ShipCtiy><ShipState>SP</ShipState><ShipZip>05442-030</ShipZip></Order>
+<OrderItems><OrderId>10386</OrderId><SKU>24</SKU><Price>3.60</Price><Qty>15</Qty></OrderItems>
+<OrderItems><OrderId>10386</OrderId><SKU>34</SKU><Price>11.20</Price><Qty>10</Qty></OrderItems>
+<Order><OrderId>10414</OrderId><CustomerId>FAMIA</CustomerId><ShipTo>Familia Arquibaldo</ShipTo><ShipAddress>Rua Orós, 92</Address><ShipCity>Sao Paulo</ShipCtiy><ShipState>SP</ShipState><ShipZip>05442-030</ShipZip></Order>
+<OrderItems><OrderId>10414</OrderId><SKU>19</SKU><Price>7.30</Price><Qty>18</Qty></OrderItems>
+<OrderItems><OrderId>10414</OrderId><SKU>33</SKU><Price>2.00</Price><Qty>50</Qty></OrderItems>
+</orders>

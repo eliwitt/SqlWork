@@ -1,0 +1,27 @@
+CREATE TABLE [dbo].[dt_codes] (
+             [rec_id] int NOT NULL,
+             [style_code] int NULL,
+             [style_text] varchar(20) NULL,
+             [dt_function] varchar(20) NULL,
+             [mssql] bit DEFAULT(0) NULL
+)
+GO
+
+INSERT INTO [dt_codes] ([rec_id], [style_code], [style_text], [dt_function],
+[mssql]) VALUES ( 1, 1, 'mm/dd/yy', 'CONVERT', 1)
+INSERT INTO [dt_codes] ([rec_id], [style_code], [style_text], [dt_function],
+[mssql]) VALUES ( 2, 2, 'yy.mm.dd', 'CONVERT', 1)
+INSERT INTO [dt_codes] ([rec_id], [style_code], [style_text], [dt_function],
+[mssql]) VALUES ( 3, 0, 'mm/dd/yyyy', 'CONVERT', 1)
+INSERT INTO [dt_codes] ([rec_id], [style_code], [style_text], [dt_function],
+[mssql]) VALUES ( 4, 108, 'time', 'CONVERT', 1)
+INSERT INTO [dt_codes] ([rec_id], [style_code], [style_text], [dt_function],
+[mssql]) VALUES ( 5, 114, 'timems', 'CONVERT', 1)
+INSERT INTO [dt_codes] ([rec_id], [style_code], [style_text], [dt_function],
+[mssql]) VALUES ( 6, 112, 'yymmdd', 'CONVERT', 1)
+INSERT INTO [dt_codes] ([rec_id], [style_code], [style_text], [dt_function],
+[mssql]) VALUES ( 7, 126, 'yyyy-mm-dd', 'CONVERT', 1)
+
+
+
+

@@ -1,0 +1,15 @@
+Listing 3: Solution That Uses a Tiebreaker: MAX(OrderID), Using ANSI Subqueries
+SELECT EmployeeID, OrderID, CustomerID, ShipVia, OrderDate
+FROM Orders AS O1
+WHERE OrderID =
+  (SELECT MAX(OrderID)
+   FROM Orders AS O2
+BEGIN CALLOUT A
+   WHERE O2.EmployeeID = O1.EmployeeID
+     AND O2.OrderDate =
+       (SELECT MAX(OrderDate)
+        FROM Orders AS O3
+        WHERE O3.EmployeeID = O1.EmployeeID)
+END CALLOUT A
+)
+

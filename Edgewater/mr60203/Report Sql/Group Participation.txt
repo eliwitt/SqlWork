@@ -1,0 +1,180 @@
+--
+-- Group Participation
+--
+-- 5.2 This shows records that are moved to the PriorEmployeeProduct table 
+--     after the complete enrollment is clicked.  These are the ones that would 
+--     show on the benefit detail web report:
+-- get the count of employees in this group that are eligible
+--
+-- Multi Groups
+declare @cmdStr		nvarchar(4000),
+	@orgStr		nvarchar(4000),
+	@debug		int,
+	@Grp_key	nvarchar(1000),
+	@ErrorMsg	varchar(255)
+set @cmdStr = ''
+set @orgStr = ''
+set @Grp_key = ''
+--
+-- retrieve the count of product selections by the group's employees
+--
+-- group  -------------------------------------------------
+--
+--set @Group_key = 'ALL'
+--	Ace 818b16ff-161e-4bf5-8d17-355d64510f7f
+--set @Group_key = '''{818b16ff-161e-4bf5-8d17-355d64510f7f}'''
+--	Chatt Chamber dd973c8a-1884-49fd-8e79-6bf5a83a3bb2
+--	Hermitage Medical Associates 4b676ae6-34ea-466e-b3ac-2949c654a621
+--set @Group_key = '818b16ff-161e-4bf5-8d17-355d64510f7f,4b676ae6-34ea-466e-b3ac-2949c654a621'
+--
+-- enrollment period  ---------------------------------------
+--
+--	Ace FA05C718-5C66-49D2-A67D-2984F18DF5A2
+--set @EnrollmentPeriod = '''{FA05C718-5C66-49D2-A67D-2984F18DF5A2}'''
+--	Chatt Chamber 8b1acbc0-ac07-4383-8271-379001be7097
+--set @EnrollmentPeriod = '''{8b1acbc0-ac07-4383-8271-379001be7097}'''
+--	Hermitage Medical Associates 878387af-f666-4e6c-bd5a-b9b90e401c62
+--set @EnrollmentPeriod = '''{878387af-f666-4e6c-bd5a-b9b90e401c62}'''
+--
+--  set @debug to an integer and you will get print statements
+--  0 = turn off
+--  1 = high level 
+--  2 = detail
+--  3 = stop after the build of the cmd str
+set @debug = 0
+
+-- add the selected groups
+if @Group_key = 'ALL'
+    goto All_grps
+set @Grp_key = @Group_key
+while (charindex(',',@Grp_key)>0)
+begin
+
+  if len(@orgStr) > 0
+	set @orgStr = @orgStr + ',''{' + ltrim(rtrim(substring(@Grp_key, 1,charindex(',',@Grp_key)-1))) + '}'''
+  else
+	set @orgStr = @orgStr + '''{' + ltrim(rtrim(substring(@Grp_key, 1,charindex(',',@Grp_key)-1))) + '}'''
+  set @Grp_key = substring(@Grp_key,charindex(',',@Grp_key) + 1,len(@Grp_key))
+end
+
+ if len(@orgStr) > 0
+	set @orgStr = @orgStr + ',''{' + @Grp_key + '}'''
+else
+	set @orgStr = @orgStr + '''{' + @Grp_key + '}'''
+set @orgStr = 'WHERE rg.ReportingGroup_key in (' + @orgStr + ')'
+ALL_grps:
+if @EnrollmentPeriod_key <> ''
+begin
+	if len(@orgStr) > 0
+		set @orgStr = @orgStr + ' and gep.enrollmentperiod_key =  ''' + @EnrollmentPeriod_key + ''''
+	else
+		set @orgStr = 'where gep.enrollmentperiod_key = ''' + @EnrollmentPeriod_key + ''''
+end
+create table #EmpTable
+(
+ Comp_nm 		varchar(60), 
+ Group_nm		varchar(60),
+ Group_ID		varchar(30),
+ empEligible		int
+)
+INSERT INTO #EmpTable(Comp_nm, Group_nm, Group_ID, empEligible)
+
+SELECT upper(g.Company_nm) Comp_nm, 
+		upper(o.Organization_nm) Group_nm,
+		o.OrganizationShort_nm Group_ID, gep.NumberofEmployees_val as empEligible
+		FROM EMP_Person p 
+		--  Find out if the person is an employee
+		JOIN EMP_Employee e 
+		ON e.Person_key = p.Person_key
+		--  After the completion button is pressed the data will be located here
+		JOIN EMP_PriorEmployeeProduct ep 
+		ON ep.Employee_key = e.Person_key
+		--  Emp enrollment period data
+		JOIN EMP_EmployeeEnrollmentPeriod eep 
+		ON eep.Person_key = e.Person_key
+		--  Group's enrollment
+		JOIN GRP_EnrollmentPeriod gep 
+		ON eep.EnrollmentPeriod_key = gep.EnrollmentPeriod_key
+		--  Group's Org
+		JOIN MSC_Organization o 
+		ON gep.Group_key = o.Organization_key
+		-- Group detailed info
+		join grp_group g
+		on g.Group_key = o.Organization_key
+		--  The group's organization data
+		JOIN v_ReportingGroup rg
+		ON gep.Group_key = rg.IncludedGroup_key
+		--  The group's custization of the products
+		JOIN PRD_Customization c 
+		ON c.GroupProduct_key = ep.GroupProduct_key
+		group by g.Company_nm, o.Logo_bin, o.Organization_nm, o.OrganizationShort_nm, gep.NumberofEmployees_val
+
+set @cmdStr = '
+SELECT upper(g.Company_nm) Company_nm,
+	o.Logo_bin Logo,
+	upper(ido.Organization_nm) InternalDivision_nm,
+	upper(o.Organization_nm) Group_nm,
+	o.OrganizationShort_nm Group_ID,
+	gep.enrollfrom_dt, gep.enrollthru_dt,
+	empCtTbl.empEligible, 
+	upper(org.organizationshort_nm) as carrier,
+	upper(grpval.short_nm) as coverage, 
+	ep.EmployeeProductStatus_vv, 
+	ep.waiverreason_vv,
+	count(c.ProductDisplay_nm) selCt
+FROM EMP_Person p 
+	--  Find out if the person is an employee
+	JOIN EMP_Employee e 
+		ON e.Person_key = p.Person_key
+	--  After the completion button is pressed the data will be located here
+	JOIN EMP_PriorEmployeeProduct ep 
+		ON ep.Employee_key = e.Person_key
+	--  Emp enrollment period data
+	JOIN EMP_EmployeeEnrollmentPeriod eep 
+		ON eep.Person_key = e.Person_key
+	--  Group''s enrollment
+	JOIN GRP_EnrollmentPeriod gep 
+		ON eep.EnrollmentPeriod_key = gep.EnrollmentPeriod_key
+	--  Group''s Org
+	JOIN MSC_Organization o 
+		ON gep.Group_key = o.Organization_key
+	-- Group detailed info
+	join grp_group g
+		on g.Group_key = o.Organization_key
+	-- Group Internal division
+	join msc_organization ido
+		on g.internaldivision_key = ido.organization_key
+	--  The group''s organization data
+	JOIN v_ReportingGroup rg
+		ON gep.Group_key = rg.IncludedGroup_key
+	--  The group''s custization of the products
+	JOIN PRD_Customization c 
+		ON c.GroupProduct_key = ep.GroupProduct_key
+	--  locate the group product info
+	join grp_groupproduct grpprd
+		on grpprd.groupproduct_key = c.GroupProduct_key
+	--  retrieve all of the groups products
+	join prd_product prod 
+		on grpprd.product_key = prod.product_key
+	--  for each product get their carrier short name
+	join msc_organization org 
+		on prod.carrier_key = org.organization_key
+	--  for each product get their coverage type
+	join grp_grouptablevalue grpval 
+		on grpprd.benefittype_key = grpval.grouptablevalue_key
+	--  retrieve the employee''s prod selection
+	left join emp_employeedata ed
+		on e.person_key = ed.person_key 
+		and 	ed.answer_key in (select answer_key from ans_answer where answer_key = ''{31CD3225-9C6A-4DAD-A8A5-3A6820CDF257}'')
+	join #EmpTable empCtTbl
+		on empCtTbl.Comp_nm = g.Company_nm and 
+		empCtTbl.Group_nm = o.Organization_nm and 
+		empCtTbl.Group_ID = o.OrganizationShort_nm
+
+' + @orgStr + '
+-- order by ProductDisplay_nm, last_nm
+group by g.Company_nm, o.Logo_bin, ido.Organization_nm, o.Organization_nm, o.OrganizationShort_nm, empCtTbl.empEligible,
+		org.organizationshort_nm, grpval.short_nm, ep.EmployeeProductStatus_vv, 
+		ep.waiverreason_vv,gep.enrollfrom_dt, gep.enrollthru_dt'
+--print @cmdStr
+exec(@cmdStr)

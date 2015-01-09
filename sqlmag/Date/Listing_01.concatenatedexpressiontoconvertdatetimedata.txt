@@ -1,0 +1,10 @@
+DECLARE @dt datetime
+             ,@result varchar(20)
+
+SET @dt = '06/01/2007'
+SET @result = DATENAME(dw, @dt) + ', ' + DATENAME(m, @dt) + ' ' +
+DATENAME(d, @dt) + ', ' + DATENAME(yyyy, @dt)
+
+PRINT @result
+
+

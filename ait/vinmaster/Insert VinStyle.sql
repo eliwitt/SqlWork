@@ -1,0 +1,1 @@
+insert into vinstyle select distinct style_raw, style from vinlookup order by style_raw

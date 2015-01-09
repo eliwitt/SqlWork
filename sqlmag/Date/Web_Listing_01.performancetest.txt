@@ -1,0 +1,42 @@
+SET NOCOUNT ON;
+
+DECLARE 
+  @i          AS INT,
+  @iterations AS INT,
+  @start      AS DATETIME,
+  @weekday    AS DATETIME,
+  @overhead   AS INT;
+
+SET @iterations = 1000000;
+
+SET @start = GETDATE();
+SET @i = 1;
+WHILE @i <= @iterations
+BEGIN
+  SET @i = @i + 1;
+END
+SET @overhead = DATEDIFF(ms, @start, GETDATE());
+
+SET @start = GETDATE();
+SET @i = 1;
+WHILE @i <= @iterations
+BEGIN
+  SET @weekday = DATEPART(weekday, GETDATE() + @@DATEFIRST - 1);
+  SET @i = @i + 1;
+END
+SELECT
+  'Technique 1' AS technique,
+  DATEDIFF(ms, @start, GETDATE()) - @overhead AS ms;
+
+SET @start = GETDATE();
+SET @i = 1;
+WHILE @i <= @iterations
+BEGIN
+  SET @weekday = DATEDIFF(day, 0, GETDATE()) % 7 + 1;
+  SET @i = @i + 1;
+END
+SELECT
+  'Technique 2' AS technique,
+  DATEDIFF(ms, @start, GETDATE()) - @overhead AS ms;
+
+

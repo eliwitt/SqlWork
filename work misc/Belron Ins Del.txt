@@ -1,0 +1,70 @@
+-- first collect all of the ids that are canidates for deletion
+--
+-- table and cursors
+--
+-- if the table exists then drop it
+if exists(select table_name from information_schema.tables
+	where table_name = '#InsDel')
+	begin
+	drop table #InsDel
+end
+--
+--  the table that will hold the ids for deleting rows
+--  
+create table #InsDel
+(
+	cnum char(10)
+)
+
+--  script variables
+declare @belcst char(10),
+	@rowcnt int
+set @rowcnt = 0
+--
+-- define a cursor and
+declare inscursor cursor for
+-- The rows that do not match in the insurance company 483 + 10 = 493
+select cCustNum from edg_tbl_Insurance_Company
+where insuranceid > 9935 and cCustNum > '' and
+	cCustNum not in (select ccustnum from EDIRECT_PROD_NEW.dbo.customers)
+order by cCustNum
+open inscursor
+-- read the first row in the cursor
+fetch next from inscursor into @belcst
+-- loop through the rows in the curosr
+while (@@FETCH_STATUS = 0)
+begin
+	print 'id ' + @belcst
+	insert into #InsDel values(@belcst)
+	set @rowcnt = @rowcnt + 1
+	fetch next from inscursor into @belcst
+end
+print 'Total rows to delete ' + convert(char(4), @rowcnt)
+close inscursor
+deallocate inscursor
+--
+--  list the rows that will not be deleted because they have an invoice
+select 'Rows that will not be dropped'
+select * from #InsDel 
+	where cnum in (
+select ins.cCustNum
+from edg_tbl_invoice_master inv
+	inner join edg_tbl_insurance_company ins
+		on inv.insuranceid = ins.insuranceid
+where inv.InsuranceId > 9935 and ins.cCustNum > ''
+)
+--  remove the rows that have invoices
+delete from #InsDel where cnum in (
+select ins.cCustNum
+from edg_tbl_invoice_master inv
+	inner join edg_tbl_insurance_company ins
+		on inv.insuranceid = ins.insuranceid
+where inv.InsuranceId > 9935 and ins.cCustNum > ''
+)
+select 'Drop the rows'
+select * from edg_tbl_insurance_company
+	where cCustNum in (select cnum from #InsDel)
+order by cCustnum
+delete from edg_tbl_insurance_company
+	where cCustNum in (select cnum from #InsDel)
+drop table #InsDel

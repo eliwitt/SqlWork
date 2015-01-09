@@ -1,0 +1,81 @@
+﻿<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ns1:SAPParts xmlns:ns1="http://tempuri.org/XMLSchema.xsd">
+	<ns1:Part>
+		<ns1:Material>Z0000000</ns1:Material>
+		<ns1:Oldmaterial/>
+		<ns1:Description>HI THERE</ns1:Description>
+		<ns1:MPN>TEST1234</ns1:MPN>
+		<ns1:ManufactID>9900000011</ns1:ManufactID>
+		<ns1:Name>Steve Witt</ns1:Name>
+		<ns1:TotalStock>0</ns1:TotalStock>
+		<ns1:BUn>EA</ns1:BUn>
+		<ns1:MaxLevel>200</ns1:MaxLevel>
+		<ns1:ReorderPoint>4.1</ns1:ReorderPoint>
+		<ns1:Type>ND</ns1:Type>
+	</ns1:Part>
+	<ns1:Part>
+		<ns1:Material>Z0000017</ns1:Material>
+		<ns1:Oldmaterial>5</ns1:Oldmaterial>
+		<ns1:Description>FILTER, PROCESS</ns1:Description>
+		<ns1:MPN>50001152</ns1:MPN>
+		<ns1:ManufactID>9900000021</ns1:ManufactID>
+		<ns1:Name>ATN HÖLZEL GMBH</ns1:Name>
+		<ns1:TotalStock>4</ns1:TotalStock>
+		<ns1:BUn>EA</ns1:BUn>
+		<ns1:MaxLevel>6</ns1:MaxLevel>
+		<ns1:ReorderPoint>3.1</ns1:ReorderPoint>
+		<ns1:Type>VB</ns1:Type>
+	</ns1:Part>
+	<ns1:Part>
+		<ns1:Material>Z0000034</ns1:Material>
+		<ns1:Oldmaterial>8</ns1:Oldmaterial>
+		<ns1:Description>PUMP, PROCESS</ns1:Description>
+		<ns1:MPN>50001284</ns1:MPN>
+		<ns1:ManufactID>9900000021</ns1:ManufactID>
+		<ns1:Name>ATN HÖLZEL GMBH</ns1:Name>
+		<ns1:TotalStock>1</ns1:TotalStock>
+		<ns1:BUn>EA</ns1:BUn>
+		<ns1:MaxLevel>1</ns1:MaxLevel>
+		<ns1:ReorderPoint>0.1</ns1:ReorderPoint>
+		<ns1:Type>VB</ns1:Type>
+	</ns1:Part>
+	<ns1:Part>
+		<ns1:Material>Z0001504</ns1:Material>
+		<ns1:Oldmaterial>7297</ns1:Oldmaterial>
+		<ns1:Description>Cart, weld</ns1:Description>
+		<ns1:MPN>24-1</ns1:MPN>
+		<ns1:ManufactID>9900000312</ns1:ManufactID>
+		<ns1:Name>SKS WELDING</ns1:Name>
+		<ns1:TotalStock>1</ns1:TotalStock>
+		<ns1:BUn>EA</ns1:BUn>
+		<ns1:MaxLevel>1</ns1:MaxLevel>
+		<ns1:ReorderPoint>0.1</ns1:ReorderPoint>
+		<ns1:Type>VB</ns1:Type>
+	</ns1:Part>
+	<ns1:Part>
+		<ns1:Material>Z0002490</ns1:Material>
+		<ns1:Oldmaterial>9521</ns1:Oldmaterial>
+		<ns1:Description>GLOVE CLIP DIELECTRIC HI-VIZ ORANGE</ns1:Description>
+		<ns1:MPN>ER3400-OR</ns1:MPN>
+		<ns1:ManufactID>9900000851</ns1:ManufactID>
+		<ns1:Name> ERGODYNE</ns1:Name>
+		<ns1:TotalStock>36</ns1:TotalStock>
+		<ns1:BUn>EA</ns1:BUn>
+		<ns1:MaxLevel>40</ns1:MaxLevel>
+		<ns1:ReorderPoint>20.1</ns1:ReorderPoint>
+		<ns1:Type>VB</ns1:Type>
+	</ns1:Part>
+	<ns1:Part>
+		<ns1:Material>Z0003225</ns1:Material>
+		<ns1:Oldmaterial>9120</ns1:Oldmaterial>
+		<ns1:Description>Switch, Scalance X212-2, 12-Ports</ns1:Description>
+		<ns1:MPN>6GK52122BB002AA3</ns1:MPN>
+		<ns1:ManufactID>9900000309</ns1:ManufactID>
+		<ns1:Name>SIEMENS</ns1:Name>
+		<ns1:TotalStock>4</ns1:TotalStock>
+		<ns1:BUn>EA</ns1:BUn>
+		<ns1:MaxLevel>4</ns1:MaxLevel>
+		<ns1:ReorderPoint>2.1</ns1:ReorderPoint>
+		<ns1:Type>VB</ns1:Type>
+	</ns1:Part>
+</ns1:SAPParts>

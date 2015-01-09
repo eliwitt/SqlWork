@@ -1,0 +1,54 @@
+Listing 1: Code That Creates and Populates a Large Orders Table
+SET NOCOUNT ON
+USE tempdb
+GO
+
+IF OBJECT_ID('Nums') IS NOT NULL
+  DROP TABLE Nums
+GO
+IF OBJECT_ID('Orders') IS NOT NULL
+  DROP TABLE Orders
+GO
+IF OBJECT_ID('Employees') IS NOT NULL
+  DROP TABLE Employees
+GO
+
+CREATE TABLE Nums(n int NOT NULL)
+BEGIN TRAN
+  DECLARE @n AS int
+  SET @n = 1
+  WHILE @n <= 1000
+  BEGIN
+    INSERT INTO Nums VALUES(@n)
+    SET @n = @n + 1
+  END
+COMMIT TRAN
+
+ALTER TABLE Nums ADD CONSTRAINT PK_Nums PRIMARY KEY(n)
+GO
+
+CREATE TABLE Employees
+(EmployeeID int NOT NULL PRIMARY KEY,
+  /* other columns */)
+INSERT INTO Employees
+  SELECT n FROM Nums WHERE n <= 100
+
+SELECT IDENTITY(INT, 1, 1) AS OrderID, CustomerID,
+  CAST(RAND(CHECKSUM(NEWID()))*100 AS int) + 1 AS EmployeeID,
+  CAST('20040101' AS datetime)
+    + CAST(RAND(CHECKSUM(NEWID()))*365 AS int) AS OrderDate,
+  RequiredDate, ShippedDate, ShipVia, Freight,
+  ShipName, ShipAddress, ShipCity, ShipRegion, ShipPostalCode,
+  ShipCountry
+INTO Orders
+FROM Northwind..Orders, Nums
+WHERE n <= 1000
+
+ALTER TABLE Orders ADD CONSTRAINT PK_Orders PRIMARY KEY(OrderID)
+ALTER TABLE Orders ADD CONSTRAINT FK_Orders_Employees
+  FOREIGN KEY(EmployeeID) REFERENCES Employees(EmployeeID)
+
+CREATE UNIQUE INDEX IDX_UNC_eid_od_oid_cid_sid
+  ON Orders(EmployeeID, OrderDate, OrderID, CustomerID, ShipVia)
+CREATE UNIQUE INDEX IDX_UNC_eid_od_cid_sid_oid
+  ON Orders(EmployeeID, OrderDate, CustomerID, ShipVia, OrderID)

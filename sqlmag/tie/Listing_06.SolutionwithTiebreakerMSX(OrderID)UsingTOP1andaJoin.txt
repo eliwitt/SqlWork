@@ -1,0 +1,10 @@
+Listing 6: Solution with Tiebreaker: MAX(OrderID), Using TOP 1 and a Join
+SELECT EmployeeID, OrderID, CustomerID, ShipVia, OrderDate
+FROM (SELECT (SELECT TOP 1 OrderID
+              FROM Orders AS K
+              WHERE K.EmployeeID = E.EmployeeID
+              ORDER BY OrderDate DESC, OrderID DESC) AS topkey
+      FROM Employees AS E) AS D
+  JOIN Orders AS O
+    ON O.OrderID = D.topkey
+

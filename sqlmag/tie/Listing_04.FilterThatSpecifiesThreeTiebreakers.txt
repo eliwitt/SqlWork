@@ -1,0 +1,18 @@
+Listing 4: Filter That Specifies Three Tiebreakers
+   WHERE O2.EmployeeID = O1.EmployeeID
+     AND O2.OrderDate =
+       (SELECT MAX(OrderDate)
+        FROM Orders AS O3
+        WHERE O3.EmployeeID = O1.EmployeeID)
+     AND O2.CustomerID =
+       (SELECT MAX(CustomerID)
+        FROM Orders AS O3
+        WHERE O3.EmployeeID = O1.EmployeeID
+          AND O3.OrderDate = O1.OrderDate)
+     AND O2.ShipVia =
+       (SELECT MAX(ShipVia)
+        FROM Orders AS O3
+        WHERE O3.EmployeeID = O1.EmployeeID
+          AND O3.OrderDate = O1.OrderDate
+          AND O3.CustomerID = O1.CustomerID)
+

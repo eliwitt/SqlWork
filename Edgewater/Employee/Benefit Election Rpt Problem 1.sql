@@ -1,0 +1,8 @@
+select * from emp_employeeproductdata
+--where answer_txt like 'Emp%'
+where Answer_key in (
+'4E464CA4-046C-4F9E-920E-2592F28BA566', 
+'AF806EC5-0449-4076-8388-7A0D894893EC',
+'AB543113-2CEA-4591-9BCF-83E2C37DA8B8',
+'B2C91FFA-1DFF-4039-A6B2-FA94C79BB496'
+)

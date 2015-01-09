@@ -1,0 +1,22 @@
+--
+--   set invoices for Belron subscriber 3402 to status of submitted using the RO date from 2-28-2005 to 5-3-2004
+--
+SELECT     count(*) as rows2set
+FROM         edg_tbl_Invoice_Master
+WHERE     (SubscriberId = 3402) AND (InvoiceStatus = 3) AND (SubmittedOn IS NULL) AND (RO2Invoice IS NOT NULL) AND 
+                      (RO2Invoice < '02/28/2005 12:59:59 PM')
+
+SELECT     InvoiceId, InvoiceStatus, RO2Invoice, SubmittedOn, SubmittedVia
+FROM         edg_tbl_Invoice_Master
+WHERE     (SubscriberId = 3402) AND (InvoiceStatus = 3) AND (SubmittedOn IS NULL) AND (RO2Invoice IS NOT NULL) AND 
+                      (RO2Invoice < '02/28/2005 12:59:59 PM')
+
+update edg_tbl_invoice_master set SubmittedOn=RO2Invoice, SubmittedVia='printer'
+where invoiceid in (SELECT InvoiceId FROM edg_tbl_Invoice_Master
+WHERE     (SubscriberId = 3402) AND (InvoiceStatus = 3) AND (SubmittedOn IS NULL) AND (RO2Invoice IS NOT NULL) AND 
+                      (RO2Invoice < '02/28/2005 12:59:59 PM'))
+
+
+SELECT     InvoiceId, InvoiceStatus, RO2Invoice, SubmittedOn, SubmittedVia
+FROM         edg_tbl_Invoice_Master
+WHERE     (SubscriberId = 3402) AND (InvoiceStatus = 3) AND (SubmittedOn = RO2Invoice)

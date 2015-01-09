@@ -1,0 +1,12 @@
+DECLARE @date1 datetime
+             ,@date2 datetime
+             ,@result varchar(8)
+
+SET @date1 = getdate() - (getdate() - '0:00:00')
+SET @date2 = getdate() - (getdate() - '5:30:00')
+SET @result = CONVERT(varchar(8), @date1 - @date2, 108)
+
+PRINT @result
+
+
+

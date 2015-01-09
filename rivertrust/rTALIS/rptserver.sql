@@ -1,0 +1,1 @@
+insert into Settings values('rptserver','worden')

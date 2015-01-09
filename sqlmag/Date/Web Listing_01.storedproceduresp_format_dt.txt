@@ -1,0 +1,68 @@
+IF EXISTS (SELECT * FROM sysobjects
+             WHERE id = object_id(N'[dbo].[sp_format_dt]') AND
+             OBJECTPROPERTY(id, N'IsProcedure') = 1)
+DROP PROCEDURE [dbo].[sp_format_dt]
+GO
+
+SET QUOTED_IDENTIFIER ON
+GO
+SET ANSI_NULLS OFF
+GO
+
+CREATE PROCEDURE sp_format_dt
+             @dt varchar(20),
+             @fmt_in varchar(20),
+             @fmt_out varchar(20) 
+
+AS
+
+SET ANSI_WARNINGS OFF
+
+DECLARE @dt_var1 VARCHAR(20)
+             ,@dt_var2 DATETIME
+             ,@code_in INT
+             ,@code_out INT
+             ,@dt_function VARCHAR(30)
+             ,@result VARCHAR(20)
+             ,@mssql BIT
+             ,@strmsg varchar(100)
+
+SET @code_in = (SELECT style_code
+FROM         dbo.dt_codes
+WHERE     (style_text = @fmt_in))
+
+SET @code_out = (SELECT style_code
+FROM         dbo.dt_codes
+WHERE     (style_text = @fmt_out))
+
+SET @mssql = (SELECT mssql
+FROM         dbo.dt_codes
+WHERE     (style_text = @fmt_out))
+
+IF @mssql = 1
+             BEGIN
+
+set @result = convert(char(20), convert(datetime, @dt, @code_in), @code_out)
+
+             END
+ELSE
+             BEGIN
+                          IF @fmt_out = 'yyyy-mm-dd'
+
+                          BEGIN
+                          SET @dt_var1 = CONVERT(char(20),@dt,@code_in)
+                          SET @dt_var2 = CAST(@dt_var1 AS datetime)
+                          SET @result = LEFT(CONVERT(char(20),@dt_var2,126),10)
+                          END
+
+
+END
+
+SET @strmsg = char(13) + 'Date / Time Formatted Result' + char(13) + 
+'============================' + char(13) + CAST(@result AS varchar)
+PRINT @strmsg
+GO
+
+
+
+

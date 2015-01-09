@@ -1,0 +1,3 @@
+datacol1	datacol2	datacol3
+dataa	datab	datac
+datad	datae	dataf

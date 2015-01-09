@@ -1,0 +1,2 @@
+RESTORE FILELISTONLY 
+FROM disk='C:\steve\db\BSMS_backup_2013_05_30_023003_0630614.bak'

@@ -1,0 +1,1 @@
+select * from vinlookup_0510 where vin in ('1C3AN55L&5','1G1ZS518&6','3VWRA71K&8','3VWRA81K&8','KNAFT4A2&A')

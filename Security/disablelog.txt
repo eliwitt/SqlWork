@@ -1,0 +1,22 @@
+The execution of the following DTS Package succeeded: 
+
+Package Name: Disable expired acct users
+Package Description: Sets the AccountDisabled for every expired acct
+Package ID: {3C29B4CA-0B53-4754-B6CE-078E50E55A53}
+Package Version: {8E9E121E-17C1-474B-BEA8-5EF4EE406C44}
+Package Execution Lineage: {57499BF7-F854-4C63-BD4C-4CC8C078426F}
+Executed On: FATMAN
+Executed By: John
+Execution Started: 04/18/2005 02:30:07 PM
+Execution Completed: 04/18/2005 02:30:07 PM
+Total Execution Time: 0.047 seconds
+
+Package Steps execution information:
+
+
+Step 'DTSStep_DTSExecuteSQLTask_1' succeeded
+Step Execution Started: 04/18/2005 02:30:07 PM
+Step Execution Completed: 04/18/2005 02:30:07 PM
+Total Step Execution Time: 0.047 seconds
+Progress count in Step: 0
+****************************************************************************************************

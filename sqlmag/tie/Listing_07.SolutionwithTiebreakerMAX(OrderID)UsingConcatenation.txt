@@ -1,0 +1,14 @@
+Listing 7: Solution with Tiebreaker: MAX(OrderID), Using Concatenation
+SELECT EmployeeID,
+  CAST(SUBSTRING(mx, 9, 4) AS int) AS OrderID,
+  CAST(SUBSTRING(mx, 13, 10) AS nchar(5)) AS CustomerID,
+  CAST(SUBSTRING(mx, 23, 4) AS int) AS ShipVia,
+  CAST(SUBSTRING(mx, 1, 8) AS datetime) AS OrderDate
+FROM (SELECT EmployeeID,
+        MAX(CAST(OrderDate AS binary(8))
+          + CAST(OrderID AS binary(4))
+          + CAST(CustomerID AS binary(10))
+          + CAST(ShipVia AS binary(4))) AS mx
+      FROM Orders
+      GROUP BY EmployeeID) AS D
+

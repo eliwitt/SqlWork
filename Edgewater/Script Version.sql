@@ -1,0 +1,1 @@
+select * from MSC_Parameter where parameter_cd='SCRIPTVERSION'

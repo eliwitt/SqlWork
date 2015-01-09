@@ -1,0 +1,1 @@
+select * from clm_person where firstname + ' ' + lastname like 'Pete% Rab%'

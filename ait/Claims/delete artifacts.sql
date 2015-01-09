@@ -1,0 +1,13 @@
+-- 1=veh 15=claim 2=vehnu 2=entitynu
+--exec sp_Delete_claim_Artifacts 1, 15, 2, 2
+-- 2=person, 15=claim 14329=invptyptr 10=entity
+--exec sp_delete_claim_Artifacts 2, 15, 14329, 10
+-- 3=property 15=claim 166=otherptr 6=other entity
+--exec sp_delete_claim_Artifacts 3, 15, 166, 6
+--select reserve.*
+--from clm_otherproperty prop 
+--	join clm_involvedparty party on prop.involvedpartyptr = party.id
+--	left join clm_reserve reserve on party.entitynumber = reserve.entitynumber and prop.claimmasterPTR = reserve.claimnumber  
+--where prop.claimmasterptr = 15 and prop.id = 166 and reserve.ClaimNumber = 15 and party.EntityNumber = reserve.EntityNumber
+-- this should close the claim
+exec sp_Delete_claim_Artifacts 2, 809, 1509, 3

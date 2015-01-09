@@ -1,0 +1,26 @@
+insert into edg_tbl_customers_billto
+(Customerid,
+Subscriberid,
+Commercial,
+Company,
+Contact,
+Address,
+Address2,
+City,
+State,
+ZIP,
+Primary_Phone,
+CreatedBy)
+Values
+(3122,
+3403,
+1,
+'Test baby',
+'Self Insert',
+'123 testing',
+'apt. 1088',
+'Scottsdale',
+'AZ',
+'85260',
+'4803142107',
+1109)

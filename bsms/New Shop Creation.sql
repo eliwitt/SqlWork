@@ -1,0 +1,22 @@
+--
+-- To add a new shop such as Paint or Bodyweld
+-- you need to insert a row into each of the following tables
+--
+-- Then someone would need to create the team entries NOTE you must go down at least 3 levels before
+-- you can add people.
+-- Then all of the areas and model info is done in the Equip Control.  Start by entering 
+--
+--			The Model information down to the New Model Types. 
+--			The equip is created and assigned to the correct Model type.
+--			You are then ready to create work orders.  
+--			You will also have to set up all of the tasks and procedures for TPMs.
+--
+-- You would need to add a default.aspx page in the shoplevel folder for this new shop so it appears
+-- on the dashboard.
+--
+select * from Team.wAPlants
+select * from EQP.ModelGroupOne
+--insert into team.wAPlants values('Academy','AC')
+--insert into EQP.ModelGroupOne values('Infrastructure', 1)
+--update EQP.ModelGroupOne set MGOneActive = 0, MGOneName = 'Common' where MGOneID = 4
+--delete EQP.ModelGroupOne where MGOneID = 8

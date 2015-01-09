@@ -1,0 +1,43 @@
+MySql notes
+
+To run the client
+
+mysql -h localhost -u root -p
+
+
+
+To create a database 
+
+create database <name>;
+
+show databases;
+
+
+To select a database
+
+USE <database>;
+
+CREATE TABLE employee_data
+(
+emp_id int unsigned not null auto_increment primary key,
+f_name varchar(20),
+l_name varchar(20),
+title varchar(30),
+age int,
+yos int,
+salary int,
+perks int,
+email varchar(60)
+);
+
+
+show tables;
+
+describe <table>;
+
+INSERT INTO employee_data
+(f_name, l_name, title, age, yos, salary, perks, email)
+values
+("Manish", "Sharma", "CEO", 28, 4, 200000, 
+50000, "manish@bignet.com");
+

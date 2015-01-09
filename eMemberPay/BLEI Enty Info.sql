@@ -1,0 +1,2 @@
+select * from CMC_BLEI_ENTY_INFO
+where BLEI_BILL_LEVEL_CK = 39604950

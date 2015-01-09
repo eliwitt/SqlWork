@@ -1,0 +1,9 @@
+Listing 5: Solution with Tiebreaker: MAX(OrderID), Using TOP 1
+SELECT EmployeeID, OrderID, CustomerID, ShipVia, OrderDate
+FROM Orders AS O1
+WHERE OrderID =
+  (SELECT TOP 1 OrderID
+   FROM Orders AS O2
+   WHERE O2.EmployeeID = O1.EmployeeID
+   ORDER BY OrderDate DESC, OrderID DESC)
+

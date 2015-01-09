@@ -1,0 +1,53 @@
+--
+-- this series of scripts will display bsl information on the given
+-- library.
+--
+-- chachaedmp1:
+--  item_mv_custom01
+--
+-- chapedmvlt1:
+--   ITEM_MV_CUSTOM04
+--
+-- wbnedm^tvawbnedm1
+--
+select 'WBN' as site, i.ina_name, a.ai_name, a.ai_tablename, a.ai_length
+from chachaedmn1.chaedmn.dbo.ina_info i, chachaedmn1.chaedmn.dbo.attr_info a
+where i.ina_attr_no = a.ai_id
+--order by i.ina_name
+order by a.ai_name
+
+--select 'BLN' as site, i.ina_name, a.ai_name, a.ai_tablename, a.ai_length
+--from tvablnedm1.blnedm.dbo.ina_info i, tvablnedm1.blnedm.dbo.attr_info a
+--where i.ina_attr_no = a.ai_id
+----order by i.ina_name
+--order by a.ai_name
+--
+--select 'SQN' as site, i.ina_name, a.ai_name, a.ai_tablename, a.ai_length
+--from tvasqnedm1.sqnedm.dbo.ina_info i, tvasqnedm1.sqnedm.dbo.attr_info a
+--where i.ina_attr_no = a.ai_id
+----order by i.ina_name
+--order by a.ai_name
+--
+--select 'WBN' as site, i.ina_name, a.ai_name, a.ai_tablename, a.ai_length
+--from tvawbnedm1.wbnedm.dbo.ina_info i, tvawbnedm1.wbnedm.dbo.attr_info a
+--where i.ina_attr_no = a.ai_id
+----order by i.ina_name
+--order by a.ai_name
+--
+--select 'CHAVAULT' as site, i.ina_name, a.ai_name, a.ai_tablename, a.ai_length
+--from chapedmvlt1.edmvltcha.dbo.ina_info i, chapedmvlt1.edmvltcha.dbo.attr_info a
+--where i.ina_attr_no = a.ai_id
+----order by i.ina_name
+--order by a.ai_name
+--
+--select 'KNXVAULT' as site, i.ina_name, a.ai_name, a.ai_tablename, a.ai_length
+--from knxpedmvlt1.edmvltknx.dbo.ina_info i, knxpedmvlt1.edmvltknx.dbo.attr_info a
+--where i.ina_attr_no = a.ai_id
+----order by i.ina_name
+--order by a.ai_name
+--
+--select 'FOS' as site, i.ina_name, a.ai_name, a.ai_tablename, a.ai_length
+--from chachaedmf1.chaedmf.dbo.ina_info i, chachaedmf1.chaedmf.dbo.attr_info a
+--where i.ina_attr_no = a.ai_id
+----order by i.ina_name
+--order by a.ai_name
