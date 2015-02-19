@@ -28,9 +28,11 @@ select * from vt2662aftt.sroprs where pspril = 'ITEMT' order by psprdc;
 
 select * from vt2662aftt.srosprs where pspril = 'ITEMT' order by psprdc;
 
---
---===================== orders =================================
---
+-- View to sroorshe sales order header
+select * from vt2662afvp.srbsoh where ohorno = 10123767;
+--  View to sroorsa sales order address
+select * from vt2662afvp.sr2soa where oaorno = 10123767;
+
 --
 --# Query For Order Header, OHORDS=Status 10/20
 --
@@ -172,6 +174,20 @@ SELECT * FROM VT2662AFTT.SROOFL WHERE OFSTAT = 'P'
 --# Clear processed events
 --
 UPDATE VT2662AFTT.SROOFL SET OFSTAT = ''
+
+
+--
+-- look at the user defined table entries
+--
+--  current product price table  WOCUSTPRIC
+select * from vt2662afvp.mfudtd where ciubce = 'WOCUSTPRIC' order by ciuece, ciufce;
+
+--  insert entries into the user defined table
+insert into vt2662afvp.mfudtd (ciubce, ciagdt, ciuece, ciufce, cixsqt) 
+values('WOCUSTPRIC','20140602','10 OZ','C00002', .10),('WOCUSTPRIC','20140602','12 OZ','C00002', .12),('WOCUSTPRIC','20140602','15 OZ BACKLIT','C00002', 2.75),('WOCUSTPRIC','20140602','7 OZ','C00002', .07),('WOCUSTPRIC','20140602','PE','C00002', .08),('WOCUSTPRIC','20140602','MESH','C00002', 1.75);
+
+-- had to update the valid from date  NOTE:  it must match!!
+update vt2662aftt.mfudtd set ciagdt = '20140529' where ciubce = 'WBU70' and ciufce = 'C00002';
 --	
 -------------------- order header--he and line--pl  ----------
 --	
@@ -233,6 +249,10 @@ SELECT OLORNO, OLLINE, OLOQTY FROM SRBSOL WHERE OLORNO = |orderNumber| AND OLSTA
 -- header
 --
 select * from vt2662aftt.mfmohr where aybmnb >= 10056620
+--
+--  cfgd item attrs
+--
+select * from vt2662afvp.mfcisa where boshce = 'BAN_10100357_10';
 --
 --  customer sales order link
 --
@@ -313,9 +333,9 @@ select olorno, olline, olcuno, olords, ayavst, aybrnb, aybpnb, thz3delv, thz3crr
 		when olords = 45 and ayavst = '60' and aybrnb = 5 and aybpnb = 30 then '8000-Order Shipped'
 		else 'Undefined'
 	end Status
-from vt2662aftt.sroorspl OLine
-	left join vt2662aftt.mfmohr OHdr on OLine.olorno = OHdr.aybmnb and OLine.olline = OHdr.aywdnb
-	left join vt2662aftt.z3optrh FedHdr on OLine.OLorno = FedHdr.Thorno and OLine.olline = FedHdr.THline and thstat <> 'D'
+from vt2662afvp.sroorspl OLine
+	left join vt2662afvp.mfmohr OHdr on OLine.olorno = OHdr.aybmnb and OLine.olline = OHdr.aywdnb
+	left join vt2662afvp.z3optrh FedHdr on OLine.OLorno = FedHdr.Thorno and OLine.olline = FedHdr.THline and thstat <> 'D'
 where olorno in (10057960, 10057965, 10057966, 10057979, 10057980, 10057984, 10057990, 10057991, 10057992, 10057993, 10057995, 10057978, 10057977, 10057985)
 order by olcuno
 --
@@ -338,6 +358,36 @@ left join vt2662afvp.srbctlsd SigSales on SNam.naarha = SigSales.ctsign
 left join vt2662afvp.srbctlsd SigCSR on SInfo.noshan = SigCSR.ctsign	
 left join vt2662afvp.sronfp Phone on SNam.nanum = Phone.nfnano and nfdesc = 'Company phone'
 where nanum like 'C%'and nacrdt > 20140801 order by nanum
+
+-- A/R Customer file  I can use this file to filter the rev
+select * from vt2662afvp.srocma where cmcuno in ('C00001', 'C05771', 'C02324', 'C02323', 'C26605')
+
+-- here i use the table to filter
+select ihcuno, sum(case when ihtypp = 1 then iholto else - iholto end) as income
+from vt2662afvp.srbish ISH
+	left join  vt2662afvp.srodta Detail on ISH.ihrefx = Detail.dtrefx 
+	left join vt2662afvp.srocma ARCust on ish.ihcuno = ARCust.cmcuno 
+where dtperi = 201502 and ARCust.cmdeno = '' and dtvoty = '80' group by ihcuno order by ihcuno;
+--
+--
+--  filter out WL
+--
+select ihcuno, sum(case when ihtypp = 1 then iholto else - iholto end) as income
+from vt2662afvp.srbish ISH
+	left join  vt2662afvp.srodta Detail on ISH.ihrefx = Detail.dtrefx 
+where ihcuno <> 'C26605' and ihcuno not in (select nonum from vt2662afvp.sronoi where nocgrp = 'MWL')
+ and dtperi = 201502 and dtvoty = '80' group by ihcuno order by ihcuno;
+
+ --
+ --  wl totals
+ --
+ --
+ select ihcuno, sum(case when ihtypp = 1 then iholto else - iholto end) as income
+from vt2662afvp.srbish ISH
+	left join  vt2662afvp.srodta Detail on ISH.ihrefx = Detail.dtrefx 
+where (ihcuno = 'C26605' or ihcuno in (select nonum from vt2662afvp.sronoi where nocgrp = 'MWL'))
+and dtperi = 201502 and dtvoty = '80' 
+group by ihcuno
 
 --
 -- Inoice Search Header
@@ -371,7 +421,7 @@ where dtperi = 201407 and dtvoty = '80' and ihcuno = 'C00046' and ihodat between
 ;
 --
 ----
---===================================== user file  =================================================
+--===================== user file  =========================================
 --
 -- ibs, NOSHAN=CSRCode, NOMOTC=shipping method
 --
@@ -389,7 +439,7 @@ SELECT CTNAME FROM VT2662AFVP.SRBCTLSD WHERE CTSIGN = ''
 --
 SELECT UPUSER FROM VT2662AFVP.SROUSP WHERE UPHAND = ''
 --
---=====================================  sys wide ===============================================
+--===============================  sys wide ===================================
 --
 -- search for a column in the tables in the sys
 --
