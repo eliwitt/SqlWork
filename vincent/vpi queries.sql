@@ -127,6 +127,75 @@ select ohcuno, oaname, ohcope, olshpm, ohodat, olprdc as itemno, oldesc, olmotc 
     left join VT2662AFVP.Z3OPTRH on  Oline.olplno = thplno and Oline.olorno = thorno and thz3delv = 'Y'
     left join VT2662AFVP.Z3OPTRpD on thcstrcn = pdcstrcn
 where ohorno = 10116557
+
+--
+-- new retrieval of the orders data including the cfg'd items
+--
+select ohcuno as "Customer Number", ohorno as "Sales Order Nu", olline as "Sales Order Line", olsalp as "Price",
+	ohodat as "Order Date", oloqty as "Qty Ordered", olcqty as "Confirmed Qty", 
+	aya4nb as "MFG Order Nu", ayprdc as "Item", ayhatx as "Description",
+	boyvcd as "Config item", boyxcd as "Cfg attr val", boogqt as "Cfg Value Nu"
+ from  vt2662afvp.sroorshe SOHdr
+    left join vt2662afvp.sroorspl Oline on SOHdr.ohorno = Oline.olorno and Oline.olshpm <> 'FREIGHT'
+    left join vt2662afvp.mfmohr MFG on Oline.olprdc = MFG.ayprdc
+    left join vt2662afvp.mfcisa CfgItem on Oline.olprdc = CfgItem.boshce
+where ohorno = 10124940
+
+--
+-- use CTE to combine fields into one colmun  works in sql server but not Navigator
+--
+with combinedCfg (CBRow, CBprdc, CBboyvcd, CBFields) as
+(
+	select 1, olprdc, min(boyvcd), cast(min(boyvcd) as varchar(8000))
+		from vt2662afvp.s10a3a30.vt2662afvp.sroorspl Oline
+		inner join vt2662afvp.s10a3a30.vt2662afvp.mfcisa CfgItem on Oline.olprdc = CfgItem.boshce
+	where olorno = 10124940
+	group by olprdc
+	union all
+	select cb1.CBRow + 1, olprdc, boyvcd, cb1.CBFields + ', ' + boyvcd
+		from vt2662afvp.s10a3a30.vt2662afvp.sroorspl Oline
+		inner join vt2662afvp.s10a3a30.vt2662afvp.mfcisa CfgItem on Oline.olprdc = CfgItem.boshce
+		inner join combinedCfg cb1 on cb1.CBprdc = Oline.olprdc
+	where olorno = 10124940 and boyvcd > cb1.CBboyvcd
+)
+select CB.CBprdc, CBFields
+	from combinedCfg CB
+	inner join (
+		select CBprdc, max(CBRow) as MaxRow 
+		from combinedCfg group by CBprdc
+	) R on CB.CBRow = R.MaxRow and CB.CBprdc = R.CBprdc
+order by CBprdc;
+--
+--  this one worked in Navigator  notice it was how I concated the fields
+--
+with combinedCfg (CBRow, CBprdc, CBboyvcd, CBFields) as
+(
+	select 1, olprdc, boyvcd, cast(boyvcd  ||';'||rtrim(boyxcd)||';'||boogqt as varchar(8000))
+		from vt2662afvp.sroorspl Oline
+		inner join vt2662afvp.mfcisa CfgItem on Oline.olprdc = CfgItem.boshce
+	where olorno in (10124940, 10124974)
+	union all
+	select 1 + cb1.CBRow, olprdc, boyvcd, cb1.CBFields || ', '|| boyvcd ||';'||rtrim(boyxcd)||';'||boogqt
+		from vt2662afvp.sroorspl Oline
+		inner join vt2662afvp.mfcisa CfgItem on Oline.olprdc = CfgItem.boshce
+		inner join combinedCfg cb1 on cb1.CBprdc = Oline.olprdc
+	where olorno in (10124940, 10124974) and boyvcd > cb1.CBboyvcd
+	order by olprdc
+)
+select ohcuno as "Customer Number", ohorno as "Sales Order Nu", olline as "Sales Order Line", olsalp as "Price",
+	ohodat as "Order Date", oloqty as "Qty Ordered", olcqty as "Confirmed Qty", 
+	aya4nb as "MFG Order Nu", ayprdc as "Item", ayhatx as "Description",
+	CBFields
+ from  vt2662afvp.sroorshe SOHdr
+    left join vt2662afvp.sroorspl Oline on SOHdr.ohorno = Oline.olorno and Oline.olshpm <> 'FREIGHT'
+    left join vt2662afvp.mfmohr MFG on Oline.olprdc = MFG.ayprdc
+   inner join combinedCfg CB on Oline.olprdc = CB.CBprdc
+   	inner join (
+		select CBprdc, max(CBRow) as MaxRow
+		from combinedCfg group by CBprdc
+	) R on CB.CBRow = R.MaxRow and CB.CBprdc = R.CBprdc
+where ohorno in (10124940, 10124974) 
+
 --
 --===========================  products =========================
 --
@@ -168,7 +237,7 @@ select * from VT2662AFTT.MFCVAL where mtyvcd = 'WBU70';
 
 --  configurator table, PGPRDC=code, PGPSNA=name, PGDESC=description 
 --
-SELECT PGPRDC, PGPSNA, PGDESC FROM {0}.SROPRG WHERE PGPRDC LIKE 'WEB%' AND PGPRDC = '
+SELECT PGPRDC, PGPSNA, PGDESC FROM {0}.SROPRG WHERE PGPRDC LIKE 'WEB%' AND PGPRDC = ''
 SELECT * FROM vt2662aftt.SROPRG WHERE PGPRDC LIKE 'WEB%'
 --
 -- box sizes -----------------------------------------------------
@@ -321,7 +390,7 @@ SELECT * FROM table(VTCUSTOMTT.udtf0001t('C05771',20131220,20140306,'C', '' )) a
 --
 --================================== spreadsheet ===================
 --
-select olorno, olline, olcuno, olords, ayavst, aybrnb, aybpnb, thz3delv, thz3crrc, thz3pstc,
+select olorno, olline, olcuno, olords, aya4nb as "MFG NU", ayavst, aybrnb, aybpnb, thz3delv, thz3crrc, thz3pstc,
  	case
 		when olords = 10 then '00500-Not Confirmed'
 		when olords = 30 then '7000-Finished'
@@ -351,9 +420,9 @@ select olorno, olline, olcuno, olords, ayavst, aybrnb, aybpnb, thz3delv, thz3crr
 		else 'Undefined'
 	end Status
 from vt2662afvp.sroorspl OLine
-	left join vt2662afvp.mfmohr OHdr on OLine.olorno = OHdr.aybmnb and OLine.olline = OHdr.aywdnb
+	left join vt2662afvp.mfmohr OHdr on OLine.olprdc = OHdr.ayprdc
 	left join vt2662afvp.z3optrh FedHdr on OLine.OLorno = FedHdr.Thorno and OLine.olline = FedHdr.THline and thstat <> 'D'
-where olorno in (10057960, 10057965, 10057966, 10057979, 10057980, 10057984, 10057990, 10057991, 10057992, 10057993, 10057995, 10057978, 10057977, 10057985)
+where olcuno = 'C26605' and olorno in (10124542, 10124532)
 order by olcuno
 --
 --================================== company ============================
