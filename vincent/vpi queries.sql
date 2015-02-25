@@ -119,7 +119,7 @@ select ohcuno, oaname, ohcope, olshpm, ohodat, olprdc as itemno, oldesc, olmotc 
 	ohorno as Ordno, olline as ORLine, updesc as CSRNam, substring(ulcpar, 7) as CSREmail
  from  vt2662afvp.sroorshe SOHdr
     left join vt2662afvp.sroorspl Oline on SOHdr.ohorno = Oline.olorno and Oline.olshpm <> 'FREIGHT'
-    left join vt2662afvp.mfmohr MFG on Oline.olprdc = MFG.ayprdc
+    left join vt2662afvp.mfmohr MFG on Oline.olorno  = MFG.aybmnb and Oline.olline = MFG.aywdnb
     left join vt2662afvp.sroorsa OAddr on Oline.olorno = OAddr.oaorno and Oline.olline = OAddr.oaline
     left join vt2662afvp.sronoi SInfo on SOHdr.ohcuno = SInfo.nonum
     left join  vt2662afvp.srousp ibsuser on SInfo.noshan = ibsuser.uphand
@@ -137,9 +137,39 @@ select ohcuno as "Customer Number", ohorno as "Sales Order Nu", olline as "Sales
 	boyvcd as "Config item", boyxcd as "Cfg attr val", boogqt as "Cfg Value Nu"
  from  vt2662afvp.sroorshe SOHdr
     left join vt2662afvp.sroorspl Oline on SOHdr.ohorno = Oline.olorno and Oline.olshpm <> 'FREIGHT'
-    left join vt2662afvp.mfmohr MFG on Oline.olprdc = MFG.ayprdc
+    left join vt2662afvp.mfmohr MFG on Oline.olorno = MFG.aybmnb and Oline.olline = MFG.aywdnb
     left join vt2662afvp.mfcisa CfgItem on Oline.olprdc = CfgItem.boshce
 where ohorno = 10124940
+--
+-- the following two queries are used in sql server and openquery is by far faster than issuing the
+--  select without it.
+--
+-- retrieve the order details for the given time period
+--  Note: When I added cfgparent I had to add distinct to remove the duplicated rows from that join
+--
+select * 
+ into orders2011
+from
+openquery(vt2662afvp,'
+select distinct ohcuno, ohorno, olline, olscpr, ohodat, oloqty, olcqty, aya4nb, a0a3cd, ayprdc, boprdc, ayhatx
+ from vt2662afvp.sroorshe SOHdr
+    left join vt2662afvp.sroorspl Oline on SOHdr.ohorno = Oline.olorno and Oline.olshpm <> ''FREIGHT''
+    left join vt2662afvp.mfmohr MFG on Oline.olorno = MFG.aybmnb and Oline.olline = MFG.aywdnb
+    left join vt2662afvp.mfmoop Moop on MFG.aya4nb = Moop.a0a4nb and Moop.a0aqnb = 20
+    left join vt2662afvp.mfcisa cfgparent on Oline.olprdc = cfgparent.boshce 
+where ohodat between 20110101 and 20111231')
+--
+-- retrieve the cfg items for each order line for the given time period
+--
+select * 
+ into cfgitems2011
+from
+openquery(vt2662afvp,'
+select olprdc, boyvcd, boyxcd, boogqt
+ from  vt2662afvp.sroorshe SOHdr
+    left join vt2662afvp.sroorspl Oline on SOHdr.ohorno = Oline.olorno and Oline.olshpm <> ''FREIGHT''
+    left join vt2662afvp.mfcisa CfgItem on Oline.olprdc = CfgItem.boshce
+where ohodat between 20110101 and 20111231')
 
 --
 -- use CTE to combine fields into one colmun  works in sql server but not Navigator
