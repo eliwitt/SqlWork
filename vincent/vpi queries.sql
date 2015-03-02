@@ -165,11 +165,11 @@ select *
  into cfgitems2011
 from
 openquery(vt2662afvp,'
-select olprdc, boyvcd, boyxcd, boogqt
+select distinct olprdc, boyvcd, boyxcd, boogqt
  from  vt2662afvp.sroorshe SOHdr
     left join vt2662afvp.sroorspl Oline on SOHdr.ohorno = Oline.olorno and Oline.olshpm <> ''FREIGHT''
     left join vt2662afvp.mfcisa CfgItem on Oline.olprdc = CfgItem.boshce
-where ohodat between 20110101 and 20111231')
+where ohodat between 20110101 and 20111231 and boyvcd is not null order by olprdc, boyvcd')
 
 --
 -- use CTE to combine fields into one colmun  works in sql server but not Navigator
