@@ -174,17 +174,16 @@ where ohodat between 20110101 and 20111231 and boyvcd is not null order by olprd
 -- for the current year we use different columns and tables
 ---
 select * 
- into orders201501test
+into orders201501test
 from
 openquery(vt2662afvp,'
-select distinct ohcuno, ohorno, olline, olscpr, ohodat, oloqty, olcqty
+select distinct ohcuno, ohorno, olline, olscpr, ohodat, oloqty, olcqty, aya4nb, a0a3cd, ayprdc, boprdc, ayhatx
  from vt2662afvp.sroorshe SOHdr
     left join vt2662afvp.sroorspl Oline on SOHdr.ohorno = Oline.olorno and Oline.olshpm <> ''FREIGHT''
     left join vt2662afvp.mfmohr MFG on Oline.olorno = MFG.aybmnb and Oline.olline = MFG.aywdnb
-    left join vt2662afvp.mfmoop Moop on MFG.aya4nb = Moop.a0a4nb
+    left join vt2662afvp.mfmoop Moop on MFG.aya4nb = Moop.a0a4nb and Moop.a0aqnb = 20
     left join vt2662afvp.mfcisa cfgparent on Oline.olprdc = cfgparent.boshce 
 where a0a2dt between 20150101 and 20150110 order by ohcuno, ohorno, olline')
-
 -- opers
 select * 
  into opers201501test
