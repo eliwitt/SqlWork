@@ -32,7 +32,8 @@ select * from vt2662aftt.srosprs where pspril = 'ITEMT' order by psprdc;
 select * from vt2662afvp.srbsoh where ohorno = 10123767;
 --  View to sroorsa sales order address
 select * from vt2662afvp.sr2soa where oaorno = 10123767;
-
+-- pick list xref
+select * from vt2662afvp.sropix where pxplno = 2161602
 --
 --# Query For Order Header, OHORDS=Status 10/20
 --
@@ -343,6 +344,15 @@ values('WOCUSTPRIC','20140602','10 OZ','C00002', .10),('WOCUSTPRIC','20140602','
 
 -- had to update the valid from date  NOTE:  it must match!!
 update vt2662aftt.mfudtd set ciagdt = '20140529' where ciubce = 'WBU70' and ciufce = 'C00002';
+
+	--  current product price table  WOCUSTPRIC
+select * from vt2662afvp.mfudtd 
+where ciubce = 'WOCUSTPRIC' and ciufce in ( 'C00260', 'C00333', 'C00167', 'C00067', 'C00069') 
+	and ciuece in ('7 OZ', 'PE')
+order by ciuece, ciufce;
+
+--update vt2662afvp.mfudtd set cixsqt = .35 where ciubce = 'WOCUSTPRIC' and ciufce in ( 'C00260', 'C00333', 'C00167', 'C00067', 'C00069') 
+--	and ciuece in ('7 OZ', 'PE');
 --	
 -------------------- order header--he and line--pl  ----------
 --	
