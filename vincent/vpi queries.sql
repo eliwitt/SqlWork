@@ -73,6 +73,12 @@ SELECT OHORNO, ohcuno, ohcope, olline, olprdc, oldesc, gtdctt, gttx70
 	else (SELECT adname FROM VT2662AFvp.SRBNAD WHERE ADNUM = olcuno and  adadno = OLDANO)
 	end Addr
 from VT2662AFvp.SRoorspl where olorno = 10117767;
+
+--
+-- sales data that got corupt by the Forward Maintenance prgr
+--
+select * from vt2662afvp.srbnoi where nonum in ('C00766', 'C01193', 'C28538', 'C33933');
+--update vt2662afvp.srbnoi set nocxxcgp = '' where nonum in ('C01193', 'C28538', 'C33933');
 --
 --# Query for PO Numbers (OHOREF)
 --
@@ -415,6 +421,10 @@ SELECT OLORNO, OLLINE, OLOQTY FROM SRBSOL WHERE OLORNO = |orderNumber| AND OLSTA
 --
 select * from vt2662aftt.mfmohr where aybmnb >= 10056620
 --
+-- update the Manufactor header to the correct status
+--
+update  vt2662afvp.mfmohr set aybrnb = 2 where aya4nb = 446583
+--
 --  cfgd item attrs
 --
 select * from vt2662afvp.mfcisa where boshce = 'BAN_10100357_10';
@@ -499,7 +509,7 @@ select olorno, olline, olcuno, olords, aya4nb as "MFG NU", ayavst, aybrnb, aybpn
 		else 'Undefined'
 	end Status
 from vt2662afvp.sroorspl OLine
-	left join vt2662afvp.mfmohr OHdr on OLine.olprdc = OHdr.ayprdc
+	left join vt2662afvp.mfmohr MFG on Oline.olorno = MFG.aybmnb and Oline.olline = MFG.aywdnb
 	left join vt2662afvp.z3optrh FedHdr on OLine.OLorno = FedHdr.Thorno and OLine.olline = FedHdr.THline and thstat <> 'D'
 where olcuno = 'C26605' and olorno in (10124542, 10124532)
 order by olcuno
@@ -523,6 +533,13 @@ left join vt2662afvp.srbctlsd SigSales on SNam.naarha = SigSales.ctsign
 left join vt2662afvp.srbctlsd SigCSR on SInfo.noshan = SigCSR.ctsign	
 left join vt2662afvp.sronfp Phone on SNam.nanum = Phone.nfnano and nfdesc = 'Company phone'
 where nanum like 'C%'and nacrdt > 20140801 order by nanum
+
+
+-- lookup using the internal name
+--
+select nanum as "Customer No", naname as "Account Name"
+from vt2662afvp.sronam	
+where nansna like 'CCO/%' order by nanSNA
 
 -- A/R Customer file  I can use this file to filter the rev
 select * from vt2662afvp.srocma where cmcuno in ('C00001', 'C05771', 'C02324', 'C02323', 'C26605')
