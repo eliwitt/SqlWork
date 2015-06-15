@@ -30,12 +30,21 @@ select olorno, olline, olcuno, olords, aya4nb as "MFG NU", ayavst, aybrnb, aybpn
 from vt2662aftt.sroorspl OLine
 	left join vt2662aftt.mfmohr MFG on Oline.olorno = MFG.aybmnb and Oline.olline = MFG.aywdnb
 	left join vt2662aftt.z3optrh FedHdr on OLine.OLorno = FedHdr.Thorno and OLine.olline = FedHdr.THline and thstat <> 'D'
-where olorno in (10058343,10058321,10058349)
-order by olcuno
+where olorno in (10058444, 10058446)
+order by olcuno;
 
 
---update  vt2662aftt.mfmohr set ayavst = '40', aybrnb = 1, aybpnb = 10 where aya4nb = 291500
+--update  vt2662aftt.mfmohr set ayavst = '40', aybrnb = 1, aybpnb = 10 where aya4nb = 291749  -- please approve proof
 --update vt2662aftt.z3optrh set thz3delv = 'N' where Thorno = 10058321 and THline = 10
 --select * from vt2662aftt.sropix where pxplno = 2044522
 --select * from vt2662aftt.sroorspl where olorno = 10058321
 --update  vt2662aftt.sroorspl set olplno = 2044522 where olorno = 10058321
+--select * from vt2662aftt.sropix where pxorno > 10058100;
+--select * from vt2662aftt.sroofl where oforno in (10058444, 10058446);
+select * from  vt2662afvp.z3optrh where thcstrcn = '639685052271';
+--update vt2662afvp.z3optrh set thorno = '10058444', thz3shpr = '10058444_1' where thcstrcn = '639685052271';
+--update vt2662afvp.z3optrh set thplno = 2044524 where thcstrcn = '639685052271';
+--insert into vt2662aftt.sroofl (oflid1, oforno, ofdate, oftime, oflid2, ofstat, ofz3entd) values('SO', '10058444', 20150609, 133900, 'TS', '', '639685052271');
+--update vt2662aftt.sroofl set oftime = 143900 where oforno = '10058444' and ofz3entd = '639685052271';
+--insert into vt2662aftt.sropix (pxplno, pxorno) values(2044524, 10058444);
+--update vt2662aftt.sroorspl set olords = 45 where olorno = 10058444

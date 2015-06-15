@@ -131,8 +131,8 @@ select ohcuno, oaname, ohcope, olshpm, ohodat, olprdc as itemno, oldesc, olmotc 
     left join vt2662afvp.sronoi SInfo on SOHdr.ohcuno = SInfo.nonum
     left join  vt2662afvp.srousp ibsuser on SInfo.noshan = ibsuser.uphand
     left join vt2662afvp.srocll on ibsuser.upuser = uluser
-    left join VT2662AFVP.Z3OPTRH on  Oline.olplno = thplno and Oline.olorno = thorno and thz3delv = 'Y'
-    left join VT2662AFVP.Z3OPTRpD on thcstrcn = pdcstrcn
+    left join VT2662AFVP.Z3OPTRH on  Oline.olplno = thplno and Oline.olorno = thorno 
+    left join VT2662AFVP.Z3OPTRpD on thcstrcn = pdcstrcn and thz3delv = 'Y'
 where ohorno = 10116557
 
 --
@@ -307,6 +307,7 @@ SELECT * FROM vt2662aftt.MFCPATL2
 SELECT JWPRDC, JWZLCD FROM VT2662AFTT.MFCITE WHERE JWPRDC LIKE 'WEB_%';
 SELECT * FROM VT2662AFTT.MFCIAT where jyprdc = 'WEB_FLS_CFG';
 select * from VT2662AFTT.MFCVAL where mtyvcd = 'WBU70';
+
 --
 --========================= configurator product ===================
 --
