@@ -32,6 +32,8 @@ select * from vt2662aftt.srosprs where pspril = 'ITEMT' order by psprdc;
 select * from vt2662afvp.srbsoh where ohorno = 10123767;
 --  View to sroorsa sales order address
 select * from vt2662afvp.sr2soa where oaorno = 10123767;
+select * from vt2662afvp.sroorsa where oaorno = 10123767;
+
 -- pick list xref
 select * from vt2662afvp.sropix where pxplno = 2161602
 --
@@ -43,6 +45,18 @@ SELECT * FROM VT2662AFTT.SROORSHE WHERE OHORNO = {ordno}
 --
 SELECT OHORNO FROM VT2662AFTT.SROORSHE WHERE OHCUNO = '{1}' AND OHSTAT = '' AND OHORDS <= 10
 --
+-- I attempted to update a range of rows in the hdr and srewed up royal
+-- the following is how I should have done it.  I tested on my server.
+-- In the original I forgot the ihorno = ohorno because of that I updated every row
+-- thank god we had a backup.
+--
+update SaleOrHdr set ohcope = 'CB_' + (select iaattr from indesignhdr hdr
+	left join indesignAttrs attrs on hdr.ihrefx = attrs.iarefx
+where ihorno between 10135051 and 10135059 and iaatrn = 1 and ihorno = ohorno) 
+where exists
+(select * from indesignhdr hdr
+where ihorno between 10135051 and 10135059 and ihorno = ohorno)
+--
 --# Query For Order Lines, OLSHPM=Line description
 --
 SELECT * FROM VT2662AFTT.SROORSPL WHERE OLORNO = {ordno}
@@ -51,6 +65,7 @@ SELECT * FROM VT2662AFTT.SROORSPL WHERE OLORNO = {ordno}
 --
 SELECT * FROM VT2662AFTT.Z3DR503A WHERE TTORNO = {ordno}
 SELECT * FROM VT2662AFTT.Z3DR503A WHERE TTORNO = '{1}' AND TTLINE = {2}
+select * from vt2662afvp.z3dr503a  where ttytcd like '%SAV%'
 --
 --# Query for Order Status (logical join file)
 --
@@ -430,6 +445,12 @@ update  vt2662afvp.mfmohr set aybrnb = 2 where aya4nb = 446583
 --
 select * from vt2662afvp.mfcisa where boshce = 'BAN_10100357_10';
 --
+-- when we tested ext I entered a value that killed the UDTF.  Come to find out
+-- that the field size has a limit of around 9999.  Ext will never be bigger than the board.
+--
+update VT2662AFTT.MFCISA set boogqt = 120.00 WHERE boyvcd like 'EXT%' and BOSHCE = 'WO EXT_10058519_20';
+SELECT * FROM VT2662AFTT.MFCISA WHERE boyvcd like 'EXT%' and BOSHCE = 'WO EXT_10058519_20';
+--
 --  customer sales order link
 --
 select LTBCNB FROM MFCULI WHERE LTORNO = |getLine.OLORNO| AND LTLINE = |getLine.OLLINE|
@@ -452,7 +473,7 @@ SELECT * FROM VT2662AFTT.SRBCTLSG WHERE CTMOTC LIKE 'F%'
 --select * from vt2662aftt.z3optrh fetch first 10 rows only
 
 select * from vt2662aftt.z3optrh where thorno >= 10056620
-
+select * from vt2662afvp.z3optrh where thz3eddt > 20150615
 SELECT * FROM VT2662AFVP.Z3OPTRH WHERE THORNO = 10109233 AND THLINE = 10
 --
 --  look at the header and detail info
@@ -629,3 +650,39 @@ SELECT UPUSER FROM VT2662AFVP.SROUSP WHERE UPHAND = ''
 SELECT SYSTEM_COLUMN_NAME, SYSTEM_TABLE_NAME, SYSTEM_TABLE_SCHEMA
 FROM qsys2.syscolumns WHERE system_column_name = 'F2PCKN' and system_table_schema =
 'VT2662AFVP'
+
+===========================  MS SQL Server tables ================================
+
+insert into [dbo].[Favorites] (contactid, baseProduct, name, width, height, attributes, active)
+values(1842, 'WEB_JRB_CFG', 'Overflow test7', 50, 10, '<attributes>
+  <attribute name="JR10" value="JR BOARD" />
+</attributes>', 1)
+
+update [dbo].[Favorites] set [active] = 0 where [favoriteId] in (10190, 10191, 10192, 10193, 10194, 10195, 10196)
+
+===========================  work on the dashboard ===============================
+--
+-- dashboard data
+--
+SELECT MFMOHR.AYBMNB, MFMOHR.AYWDNB, MFMOOP.A0A4NB, MFMOOP.A0AQNB, MFMOOP.A0A3CD, MFMOOP.A0A2DT, MFMOOP.A0A3DT,  
+case  when SQTbl.ttforv is null then '0' else cast(SQTbl.ttforv as integer)  end SqFt
+ from S10A3A30.vt2662afvp.mfmohr mfmohr 
+    left join S10A3A30.vt2662afvp.mfmoop mfmoop on mfmohr.aya4nb = mfmoop.a0a4nb
+left join (select ttorno, ttline, ttforv from S10A3A30.vt2662afvp.z3dr503a where ttytcd like '%SF') SQTbl on mfmohr.aybmnb = ttorno and mfmohr.aywdnb = ttline
+where a0a3dt = 20150706 order by aybmnb, aywdnb, a0a4nb, a0aqnb
+--
+-- the openquery version
+--
+select * from
+openquery(vt2662afvp,'
+select aybmnb, aywdnb, a0a4nb, a0aqnb, a0a3cd, a0a2dt as "Start Date", a0a3dt as "Completion date",
+  case  when SQTbl.ttforv is null then ''0'' else SQTbl.ttforv end SqFt
+ from vt2662afvp.mfmohr MFG 
+    left join vt2662afvp.mfmoop Moop on MFG.aya4nb = Moop.a0a4nb
+left join (select ttorno, ttline, ttforv from vt2662afvp.z3dr503a where ttytcd like ''%SF'') SQTbl on MFG.aybmnb = ttorno and MFG.aywdnb = ttline
+where a0a3dt = 20150630 order by aybmnb, aywdnb, a0a4nb, a0aqnb')
+--  the attr table
+select * from vt2662afvp.z3dr503a where ttorno = 10133741
+--  ttorno = 10133741;
+select * from vt2662afvp.z3dr503a where ttytcd like '%SF%' and ttorno > 10133740;
+--select * from vt2662afvp.mfcisa where boshce like '%10133741%';
