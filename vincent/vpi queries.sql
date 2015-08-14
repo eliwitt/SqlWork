@@ -107,6 +107,10 @@ SELECT * FROM VT2662AFvp.SROORSHE
 sheader
 	left join VT2662AFvp.SROORSPL sline on sheader.ohorno = sline.olornoWHERE OHORNO in (10111430, 10111275);
 
+--  sales order
+---update  VT2662AFvp.SROORSPL set olords = 45 where OHORNO = 10133693 and olline in (930, 940 950, 970)
+SELECT olords FROM VT2662AFvp.SROORSPL WHERE OlORNO = 10133693 and olline in (930, 940, 950, 970)	
+
 SELECT * FROM VT2662AFvp.SRBSOL WHERE OLORNO in (10111430, 10111275);
 
 SELECT * FROM VT2662AFVP.Z3OPTRH WHERE THORNO in (10111430, 10111275);
@@ -586,12 +590,22 @@ where ihcuno <> 'C26605' and ihcuno not in (select nonum from vt2662afvp.sronoi 
  --  wl totals
  --
  --
- select ihcuno, sum(case when ihtypp = 1 then iholto else - iholto end) as income
+with wlaccts (wlcuno, wlincome) as
+(
+select 'C26605', sum(case when ihtypp = 1 then iholto else - iholto end) as income
 from vt2662afvp.srbish ISH
 	left join  vt2662afvp.srodta Detail on ISH.ihrefx = Detail.dtrefx 
-where (ihcuno = 'C26605' or ihcuno in (select nonum from vt2662afvp.sronoi where nocgrp = 'MWL'))
-and dtperi = 201502 and dtvoty = '80' 
+where dtperi = 201507 and dtvoty = '80' and (ihcuno in (select nonum from vt2662afvp.sronoi where nocgrp = 'MWL') or ihcuno = 'C26605')
+group by ihcuno 
+)
+select wlcuno, sum(wlincome) as income from wlaccts group by wlcuno
+union
+select ihcuno, sum(case when ihtypp = 1 then iholto else - iholto end) as income
+from vt2662afvp.srbish ISH
+	left join  vt2662afvp.srodta Detail on ISH.ihrefx = Detail.dtrefx 
+where dtperi = 201507 and dtvoty = '80' and ihcuno not in (select nonum from vt2662afvp.sronoi where nocgrp = 'MWL') and ihcuno <> 'C26605'
 group by ihcuno
+order by 1;
 
 --
 -- Inoice Search Header
@@ -630,6 +644,7 @@ where dtperi = 201407 and dtvoty = '80' and ihcuno = 'C00046' and ihodat between
 -- ibs, NOSHAN=CSRCode, NOMOTC=shipping method
 --
 SELECT NOSHAN FROM VT2662AFVP.SRONOI WHERE NONUM =
+select * from vt2662afvp.sronoi where nocgrp = 'MWL'
 --
 -- email data
 --
@@ -686,3 +701,57 @@ select * from vt2662afvp.z3dr503a where ttorno = 10133741
 --  ttorno = 10133741;
 select * from vt2662afvp.z3dr503a where ttytcd like '%SF%' and ttorno > 10133740;
 --select * from vt2662afvp.mfcisa where boshce like '%10133741%';
+--
+-- verify my counts
+--
+SELECT count(*)
+ from vt2662afvp.mfmohr mfmohr 
+	left join vt2662afvp.mfmoop mfmoop on mfmohr.aya4nb = mfmoop.a0a4nb
+	left join (select ttorno, ttline, ttforv from vt2662afvp.z3dr503a where ttytcd like '%SF') SQTbl 
+		on mfmohr.aybmnb = ttorno and mfmohr.aywdnb = ttline
+where a0a3dt = 20150715 and a0a3cd = 'DIPRT' and ayavst <> 60
+
+select * from vt2662afvp.z3dr503a where ttorno = 10134950 and ttline = 10 and trim(ttytcd) like '%SF'
+
+SELECT OHORNO,OlLINE, A0A4NB, A0AQNB, A0A3CD, aybrnb, A0A3DT,  
+	case  when SQTbl.ttforv is null then '0' else cast(SQTbl.ttforv as integer) end SqFt
+ from VTCUSTOM.IBSSTATA 
+	left join (select ttorno, ttline, ttforv from vt2662afvp.z3dr503a where trim(ttytcd) like '%SF') SQTbl 
+		on OHORNO = ttorno and OlLINE = ttline
+where OHORDS<>'60' and OHORDS<>'0' and AYA4NB>'1' and a0a3cd = 'VIPRX' and AYBRNB = 4 and a0aqnb = 20 order by OHORNO,OlLINE, a0a4nb, a0aqnb
+
+
+
+
+===================== Delivery addr  ======================
+--
+--  10136956 two shipping add
+--
+--  delivery report
+select thorno, thplno, oaadr1, oaadr2, oaadr3, oaadr4, oapocd
+from (select  thorno, thplno, max(thz3evdt) maxdate from vt2662afvp.z3optrh 
+		where thz3pstc = 'LO'
+		group by thorno, thplno)
+	left join VT2662AFvp.SRoorspl on thorno = olorno and thplno = olplno
+	left join vt2662afvp.sroorsa on olorno = oaorno and olline = oaline
+
+--  help queries
+select * from VT2662AFVP.Z3OPTRH where thorno in (10130641);
+select * from  VT2662AFVP.Z3OPTRD where evcstrcn in (select thcstrcn from VT2662AFVP.Z3OPTRH where thorno in (10130641));
+select * from  VT2662AFVP.Z3OPTRPD where pdcstrcn in (select thcstrcn from VT2662AFVP.Z3OPTRH where thorno in (10130641));
+
+
+-- verify order
+SELECT OHORNO, ohcuno, ohcope, olline, olplno, olprdc, oaadr1
+	FROM VT2662AFvp.SROORSHE sheader
+	left join VT2662AFvp.SROORSPL sline on sheader.ohorno = sline.olorno
+	left join vt2662afvp.sroorsa on olorno = oaorno and olline = oaline
+ WHERE ohorno =10136956
+
+select * from VT2662AFVP.Z3OPTRH where thz3pstc = 'LO' order by thz3evtm, thz3evdt desc;
+
+select * from VT2662AFVP.Z3OPTRH where thorno in (10124216 );
+select * from  VT2662AFVP.Z3OPTRD where evcstrcn in (select thcstrcn from VT2662AFVP.Z3OPTRH where thorno in (10124216 ));
+select * from  VT2662AFVP.Z3OPTRPD where pdcstrcn in (select thcstrcn from VT2662AFVP.Z3OPTRH where thorno in (10124216 ));
+
+select * from VT2662AFvp.SRoorsa where oaorno = 10124216 
