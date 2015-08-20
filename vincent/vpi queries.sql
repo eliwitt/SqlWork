@@ -675,6 +675,48 @@ values(1842, 'WEB_JRB_CFG', 'Overflow test7', 50, 10, '<attributes>
 
 update [dbo].[Favorites] set [active] = 0 where [favoriteId] in (10190, 10191, 10192, 10193, 10194, 10195, 10196)
 
+============================  my schema  =========================================
+
+--date conversion pg 21
+--
+select u.id, monthname(u.confirmed_date) || ' ' || rtrim(char(day(u.confirmed_date))) || ',' || rtrim(char(year(u.confirmed_date))) confirmed, confirmed_date from upfall u;
+
+--
+-- aggregate functions pg 52
+--
+select count(u.county_id) as count_count from upfall u;
+select count( distinct u.county_id) as count_count from upfall u;
+--
+-- group by
+--
+select t.name as tour_name, u.name from upfall u inner join trip t on u.id = t.stop;
+select t.name as tour_name, count(*) from upfall u inner join trip t on u.id = t.stop group by t.name;
+--
+-- conversion pg 93
+--
+select char(100.12345), char(decimal('100.12345', 5, 2)) from pivot where x=1;
+
+--
+--  hierarchical queries pg 8
+--
+select id, name, type, parent_id
+from gov_unit
+start with parent_id is null
+connect by parent_id = prior id;
+
+--
+--  Recursive pg 62
+--
+with recursiveGov (depth, id, parent_id, name, type) as
+(
+	select 1, parent.id, parent.parent_id, parent.name, parent.type
+	from gov_unit parent where parent.parent_id is null
+	union all
+	select parent.depth+1, child.id, child.parent_id, child.name, child.type
+	from recursiveGov parent, gov_unit child
+	where child.parent_id = parent.id)
+select depth, id, parent_id, name, type from recursiveGov
+
 ===========================  work on the dashboard ===============================
 --
 -- dashboard data
