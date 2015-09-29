@@ -132,9 +132,9 @@ FROM VT2662AFvp.SROORSHE sheader
 left join VT2662AFVP.Z3OPTRH ship on sheader.ohorno = ship.THORNO
 WHERE THORNO in (10111430, 10111275) and ohmotc = 'VPI' and  thstat <> 'D';
 --
--- package types
+-- package types(a.k.a. Box Sizes)
 --
-select * from vt2662aftt.z3bptp
+select * from vt2662aftt.z3bptp WHERE PTPCKT LIKE 'TRI%' AND PTNWGT > 0 ORDER BY PTGVOL ASC
 
 
 --
@@ -455,6 +455,20 @@ select * from vt2662afvp.mfcisa where boshce = 'BAN_10100357_10';
 update VT2662AFTT.MFCISA set boogqt = 120.00 WHERE boyvcd like 'EXT%' and BOSHCE = 'WO EXT_10058519_20';
 SELECT * FROM VT2662AFTT.MFCISA WHERE boyvcd like 'EXT%' and BOSHCE = 'WO EXT_10058519_20';
 --
+-- update the status on the orders in the sub-select
+--
+update vt2662aftt.mfmohr set aybrnb = 2, aybpnb = 15  where aya4nb in (
+select aya4nb from vt2662aftt.mfmohr MFG
+	left join vt2662aftt.sroorspl OLine on MFG.aybmnb = Oline.olorno and  MFG.aywdnb = Oline.olline
+where olords = 20 and ayavst = '40' and aybrnb = 1 and aybpnb = 10
+)
+
+update VT2662AFvp.SROOFL set ofstat = '' where oforno in (
+10141385, 10141367, 10141368, 10141370, 10141371, 10141372, 10141373, 10141374, 10141375, 10141376, 10141377, 10141380, 10141381, 10141382,
+10141386, 10141387, 10141389, 10141390, 10141391, 10141393, 10141395, 10141398, 10141402, 10141404, 10141408, 10141416, 10141421, 10141428,
+10141430, 10141431, 10141432, 10141433, 10141434, 10141435, 10141436, 10141437, 10141438
+) and oflid2 in ('OC', 'AR', 'TS', 'TD')
+--
 --  customer sales order link
 --
 select LTBCNB FROM MFCULI WHERE LTORNO = |getLine.OLORNO| AND LTLINE = |getLine.OLLINE|
@@ -692,6 +706,18 @@ select count( distinct u.county_id) as count_count from upfall u;
 select t.name as tour_name, u.name from upfall u inner join trip t on u.id = t.stop;
 select t.name as tour_name, count(*) from upfall u inner join trip t on u.id = t.stop group by t.name;
 --
+-- using the having clause you can restrict the rows returned from the group by
+--
+select t.name as tour_name, count(*) from upfall u inner join trip t on u.id = t.stop group by t.name having count(*) >= 6;
+--
+-- this technique helps reduce the group by list
+--
+select c.id as county_id, c.name as county_name,
+	agg.falls_count
+from county c
+	inner join ( select u.county_id, count(*) as falls_count from upfall u group by u.county_id ) agg
+		on c.id = agg.county_id;
+--
 -- conversion pg 93
 --
 select char(100.12345), char(decimal('100.12345', 5, 2)) from pivot where x=1;
@@ -716,6 +742,69 @@ with recursiveGov (depth, id, parent_id, name, type) as
 	from recursiveGov parent, gov_unit child
 	where child.parent_id = parent.id)
 select depth, id, parent_id, name, type from recursiveGov
+
+
+--
+-- I converted a SQL mag example to DB2
+--
+
+-- notice that to use identity for DB2 you have to add additional
+-- statements.  It works
+--
+CREATE TABLE LIKETest(
+    id      decimal(6) not null
+	generated always as  IDENTITY (
+	start with 1 increment by 1
+	maxvalue 999999
+	cache 20 no order),
+    Name    varchar(1000),
+    phone   varchar(1000),
+    last_movie_release  date,
+    amount  varchar(1000),
+    comments varchar(1000)
+);
+
+CREATE INDEX IX_LIKETest ON LIKETest(Name);
+
+-- dates in DB2 need the dash
+INSERT INTO LIKETest(Name, phone, last_movie_release, amount, comments)
+VALUES
+    ( 'Bruce Wayne',     'Confidential',   '2012-07-20', '35131'        , 'Reach at email: bwayne@WayneIndustries.com'),
+    ( 'Clark Kent',      '8457390095',     '2013-06-14', '58455.64'     , 'Work email: ckent@daily_planet.com'),
+    ( 'Richard Grayson', '212-555-0187',   '1997-06-20', '.63521'       , 'Known as Dick Grayson'),
+    ( 'Diana Prince',    '849-555-0139',   NULL      , '58485.'       , 'Amazon princess, treat with respect'),
+    ( 'J''onn J''onzz',  'N/A',           NULL      , '-15612'       , 'Last Martian'),
+    ( 'Barry Allen',     '(697) 555-0142', NULL      , '-1.5413'      , 'Too fast'),
+    ( 'Reed Richards',   '917-330-2568',   '2015-08-07', '-4156-15'     , NULL),
+    ( 'Susan Storm',     '917-970-0138',   '2015-08-07', '156.516.51'   , NULL),
+    ( 'Johnny Storm',    '917-913-0172',   '2015-08-07', '665465-'      , NULL),
+    ( 'Ben Grimm',       '917-708-0141',   '2015-08-07', 'One Thousand' , NULL),
+    ( 'Peter Parker',    '917-919-0140',   '2014-05-02', '56E6546'      , 'With great power comes great responsibility'),
+    ( 'Tony Stark',      '492-167-0139',   '2013-05-03', '$'            , ''),
+    ( 'Wade Wilson',     '692-257-1937',   NULL      , 'ss'           , 'Just 50% hero'),
+    ( 'Bruce Banner',    '781-167-4628',   '2008-06-13', 'FFFFFF'       , 'sdo@a#%^add34.voi');
+
+--
+--  queries on the table above
+--
+SELECT *
+ FROM LIKETest
+ WHERE Name LIKE '___n%';
+
+SELECT *
+ FROM LIKETest
+ WHERE Name LIKE '%n___';
+
+--
+-- to check for numerics.  To date have not found a good example for DB2
+--
+SELECT id, name, amount, 
+CASE
+  WHEN LENGTH(RTRIM(TRANSLATE(amount, '*', ' -.0123456789'))) = 0 
+  THEN 'All digits'
+  ELSE 'No'
+END AmtNumeric
+ FROM LIKETest
 
 ===========================  work on the dashboard ===============================
 --
@@ -763,7 +852,25 @@ SELECT OHORNO,OlLINE, A0A4NB, A0AQNB, A0A3CD, aybrnb, A0A3DT,
 where OHORDS<>'60' and OHORDS<>'0' and AYA4NB>'1' and a0a3cd = 'VIPRX' and AYBRNB = 4 and a0aqnb = 20 order by OHORNO,OlLINE, a0a4nb, a0aqnb
 
 
+SELECT OHORNO,OlLINE, A0A4NB, A0AQNB, A0A3CD, aybrnb, ayqty, aya0dt, 
+	CAST( 
+    	LPAD( RTRIM( CHAR( INTEGER(A0A3DT/1000000 ))), 2, '0' ) || '/' || LPAD( RTRIM( CHAR( MOD( A0A3DT/10000, 100 ))), 2, '0' )  || '/' || MOD( A0A3DT, 10000 ) 
+AS CHAR(10)) 
+AS chardateresult,
+	case  when SQTbl.ttforv is null then '0' else cast(SQTbl.ttforv as integer) end SqFt
+ from VTCUSTOM.IBSSTATA 
+	left join (select ttorno, ttline, ttforv from vt2662afvp.z3dr503a where trim(ttytcd) like '%SF') SQTbl 
+		on OHORNO = ttorno and OlLINE = ttline
+where OHORDS<>'60' and OHORDS<>'0' and AYA4NB>'1' and olhsol <> 'Y' order by OHORNO,OlLINE, a0a4nb, a0aqnb
 
+-- current query to 
+SELECT OHORNO,OlLINE, A0A4NB, A0AQNB, A0A3CD, aybrnb, (ayqty + ayedqt) - a0bqqt as ayqty, 
+	DATE(INSERT(INSERT(LEFT(CHAR(aya0dt),8),5,0,'-'),8,0,'-')) aya0dt, A0A3DT, 
+	case  when SQTbl.ttforv is null then '0' else (cast(SQTbl.ttforv as integer) * (ayqty + ayedqt) - a0bqqt) end SqFt
+ from VTCUSTOM.IBSSTATA 
+	left join (select ttorno, ttline, ttforv from vt2662afvp.z3dr503a where trim(ttytcd) like '%SF') SQTbl 
+		on OHORNO = ttorno and OlLINE = ttline
+where OHORDS<>'60' and OHORDS<>'0' and AYA4NB>'1' and olhsol <> 'Y' order by OHORNO,OlLINE, a0a4nb, a0aqnb
 
 ===================== Delivery addr  ======================
 --
@@ -797,3 +904,29 @@ select * from  VT2662AFVP.Z3OPTRD where evcstrcn in (select thcstrcn from VT2662
 select * from  VT2662AFVP.Z3OPTRPD where pdcstrcn in (select thcstrcn from VT2662AFVP.Z3OPTRH where thorno in (10124216 ));
 
 select * from VT2662AFvp.SRoorsa where oaorno = 10124216 
+
+=============================  Work on the Order Flow Log ==================================
+-- list of AR orders with no AP entry  now if a line had AP line we would need to mod this sql
+--
+select * from vt2662aftt.sroofl where oflid2 = 'AR' and oforno not in (
+	select oforno from vt2662aftt.sroofl where oflid2 = 'AP'
+);
+
+--
+--  insert into the log entries for AP
+--
+insert into vt2662aftt.sroofl (oflid1, oforno, ofline, ofdate, oftime, oflid2, ofordt, ofsrom, ofprdc, ofords, ofstat)
+	( select 'SO',  oforno, ofline, ofdate, oftime + 20,  'AP', 'OO', 'VPI',  ofprdc, 20, 'P'
+	from vt2662aftt.sroofl where oforno = 10059355 and ofline = 10 and oflid2 = 'AR')
+
+--
+-- using the above insert I want to see if I do not receive the overnight
+--
+select * from vt2662aftt.sroofl where oforno = 10059355
+--
+-- if everything looks good then I will run the following
+--
+insert into vt2662aftt.sroofl (oflid1, oforno, ofline, ofdate, oftime, oflid2, ofordt, ofsrom, ofprdc, ofords, ofstat)
+	( select 'SO',  oforno, ofline, ofdate, oftime + 20,  'AP', 'OO', 'VPI',  ofprdc, 20, 'P'
+	from vt2662aftt.sroofl where oflid2 = 'AR' and oforno not in (
+	select oforno from vt2662aftt.sroofl where oflid2 = 'AP'))
