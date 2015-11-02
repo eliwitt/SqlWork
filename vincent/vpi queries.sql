@@ -689,6 +689,19 @@ values(1842, 'WEB_JRB_CFG', 'Overflow test7', 50, 10, '<attributes>
 
 update [dbo].[Favorites] set [active] = 0 where [favoriteId] in (10190, 10191, 10192, 10193, 10194, 10195, 10196)
 
+--
+--  check the order recorded status
+--
+SELECT *
+  FROM [VPI_Online].[dbo].[OrderStatusNotification]
+  WHERE orderNumber = 10142634
+
+--....shows contactId 2470 as the ACCOUNT_EXEC.
+
+SELECT contactid, companyid, emailaddress, firstName, lastName
+  FROM [VPI_Online].[dbo].[Contacts]
+  WHERE contactid in (2470, 1958)
+
 ============================  my schema  =========================================
 
 --date conversion pg 21
@@ -806,6 +819,12 @@ CASE
 END AmtNumeric
  FROM LIKETest
 
+ select u.id, u.county_id, u.northing n1,
+	min(u.northing) over (partition by u.county_id) n2,
+	avg(u.northing) over () n3,
+	max(u.northing) over (partition by u.open_to_public) n4
+from sqlpocket.upfall u;
+
 ===========================  work on the dashboard ===============================
 --
 -- dashboard data
@@ -884,6 +903,13 @@ from (select  thorno, thplno, max(thz3evdt) maxdate from vt2662afvp.z3optrh
 	left join VT2662AFvp.SRoorspl on thorno = olorno and thplno = olplno
 	left join vt2662afvp.sroorsa on olorno = oaorno and olline = oaline
 
+--
+-- Don't forget to remove the freight line
+--
+SELECT thorno, olline, olplno, THZ3EVDT, THZ3EVTM, THCSTRCN FROM VT2662AFVP.Z3OPTRH 
+	left join VT2662AFvp.SRoorspl on thorno = olorno and thplno = olplno and olprdc <> 'FREIGHT'
+WHERE THZ3CRRC = 'FEDEX' and THCSTRCN = '647253808095'
+
 --  help queries
 select * from VT2662AFVP.Z3OPTRH where thorno in (10130641);
 select * from  VT2662AFVP.Z3OPTRD where evcstrcn in (select thcstrcn from VT2662AFVP.Z3OPTRH where thorno in (10130641));
@@ -930,3 +956,10 @@ insert into vt2662aftt.sroofl (oflid1, oforno, ofline, ofdate, oftime, oflid2, o
 	( select 'SO',  oforno, ofline, ofdate, oftime + 20,  'AP', 'OO', 'VPI',  ofprdc, 20, 'P'
 	from vt2662aftt.sroofl where oflid2 = 'AR' and oforno not in (
 	select oforno from vt2662aftt.sroofl where oflid2 = 'AP'))
+
+select (select count(*) from vt2662afvp.sroofl where oflid2 in ('TS', 'TD') and ofdate > 20151018) as total,
+	 (select count(*) from vt2662afvp.sroofl where oflid2 = 'TS' and ofdate > 20151018 and ofline = 0) as TSNoline,
+	 (select count(*) from vt2662afvp.sroofl where oflid2 = 'TS' and ofdate > 20151018 and ofline > 0) as TSHasline,
+	 (select count(*) from vt2662afvp.sroofl where oflid2 = 'TD' and ofdate > 20151018 and ofline = 0) as TDNoline,
+	 (select count(*) from vt2662afvp.sroofl where oflid2 = 'TD' and ofdate > 20151018 and ofline > 0) as TDHasline
+from sysibm.sysdummy1
