@@ -695,7 +695,13 @@ update [dbo].[Favorites] set [active] = 0 where [favoriteId] in (10190, 10191, 1
 SELECT *
   FROM [VPI_Online].[dbo].[OrderStatusNotification]
   WHERE orderNumber = 10142634
-
+--
+-- alternative
+--
+SELECT firstName + ' ' + lastname, orderNumber, lineNumber, [type], dateAdded, emailaddress
+FROM OrderStatusNotification notify
+	left join Contacts on notify.contactid = Contacts.contactid
+WHERE notify.companyid = 'C23952' order by orderNumber
 --....shows contactId 2470 as the ACCOUNT_EXEC.
 
 SELECT contactid, companyid, emailaddress, firstName, lastName
@@ -931,6 +937,63 @@ select * from  VT2662AFVP.Z3OPTRPD where pdcstrcn in (select thcstrcn from VT266
 
 select * from VT2662AFvp.SRoorsa where oaorno = 10124216 
 
+with FedOrders (customer, ordernu, linenu, picklst, tracknu, estddt, qty, desc, design) as
+(
+	select olcuno, thorno, olline, thplno, thcstrcn, thz3eddt, oloqty, oldesc, olshpm
+		from (select  thorno, thplno, thcstrcn, thz3eddt from vt2662afvp.z3optrd feddtl
+			 left join vt2662afvp.z3optrh fedhdr on evcstrcn = thcstrcn
+			where evz3pstc = 'PU' and evz3evdt = 20151111)
+		left join VT2662AFvp.SRoorspl on thorno = olorno and thplno = olplno
+)
+select customer, ordernu, linenu, picklst, tracknu, estddt, qty, desc, ohcope as advertiser, design, oaname, oaadr1, oaadr2, oaadr3, oaadr4, oapocd from FedOrders
+	left join vt2662afvp.sroorsa on ordernu = oaorno and linenu = oaline
+	left join vt2662afvp.sroorshe on ordernu = ohorno
+where (oaname like 'CCO%') or (oaname like 'Clear%')
+ order by customer, ordernu, linenu, picklst
+
+select  thorno, thplno, thcstrcn, thz3eddt from
+	 vt2662afvp.z3optrd feddtl
+	 left join vt2662afvp.z3optrh fedhdr on evcstrcn = thcstrcn
+where evz3pstc = 'PU' and evz3evdt = 20151111
+order by thorno
+
+call vt2662ap.shippingreport;
+
+select olorno, olline, olplno, thz3eddt, olcuno, olords, aya4nb as "MFG NU", ayavst, aybrnb, aybpnb, thz3delv, thz3crrc, thz3pstc,
+ 	case
+		when olords = 10 then '00500-Not Confirmed'
+		when olords = 30 then '7000-Finished'
+		when olords = 45 and thcstrcn like 'delivered%' then '9000-Order Delivered'
+		when olords = 45 and thz3delv = 'Y' then '9000-Order Delivered'
+		when olords = 45 and thz3delv = '' then '8000-Order Shipped'
+		when olords = 45 and thz3delv = 'N' then '8000-Order Shipped'
+		when olords = 60 and thz3delv = 'Y' then '9000-Order Delivered'
+		when olords = 60 and thcstrcn like 'delivered%' then '9000-Order Delivered'
+		when olords = 60 and thz3delv = '' then '8000-Order Shipped'
+		when olords = 60 and thz3delv = 'N' then '8000-Order Shipped'
+		when olords = 20 and ayavst = '10' and aybrnb = 0 and aybpnb = 0 then '1000-Please upload art'
+		when olords = 20 and ayavst = '20' and aybrnb = 0 and aybpnb = 0 then '1000-Please upload art'
+		when olords = 20 and ayavst = '20' and aybrnb = 0 and aybpnb = 10 then '1000-Please upload art'
+		when olords = 20 and ayavst = '40' and aybrnb = 0 and aybpnb = 10 then '2000-Order Confirmation'
+		when olords = 20 and ayavst = '40' and aybrnb = 1 and aybpnb = 10 then '3000-Ready 4 Approval'
+		when olords = 20 and ayavst = '40' and aybrnb = 1 and aybpnb = 15 then '3000-Ready 4 Approval'
+		when olords = 20 and ayavst = '40' and aybrnb = 2 and aybpnb = 15 then '4000-Proof Approved'
+		when olords = 20 and ayavst = '40' and aybrnb = 2 and aybpnb = 18 then '4000-Proof Approved'
+		when olords = 20 and ayavst = '40' and aybrnb = 3 and aybpnb = 18 then '5000-Ripped'
+		when olords = 20 and ayavst = '40' and aybrnb = 3 and aybpnb = 20 then '5000-Ripped'
+		when olords = 20 and ayavst = '40' and aybrnb = 4 and aybpnb = 20 then '6000-Printed'
+		when olords = 20 and ayavst = '40' and aybrnb = 4 and aybpnb = 30 then '6000-Printed'
+		when olords = 20 and ayavst = '60' and aybrnb = 5 and aybpnb = 30 then '7000-Finished'
+		when olords = 20 and ayavst = '60' and aybrnb = 6 and aybpnb = 30 then '7000-Finished'
+		when olords = 45 and ayavst = '60' and aybrnb = 5 and aybpnb = 30 then '8000-Order Shipped'
+		else 'Undefined'
+	end Status, evz3pstd
+from vt2662afvp.sroorspl OLine
+	left join vt2662afvp.mfmohr MFG on Oline.olorno = MFG.aybmnb and Oline.olline = MFG.aywdnb
+	left join vt2662afvp.z3optrh FedHdr on OLine.OLorno = FedHdr.Thorno and OLine.olline = FedHdr.THline and thstat <> 'D'
+	left join vt2662afvp.z3optrd feddtl on fedhdr.thcstrcn = feddtl.evcstrcn and fedhdr.thz3evdt = feddtl.evz3evdt and fedhdr.thz3evtm = feddtl.evz3evtm
+where olstat <> 'D' and olorno in (10145434, 10145700, 10145569, 10145638, 10145654, 10145403)
+order by olorno, olline
 =============================  Work on the Order Flow Log ==================================
 -- list of AR orders with no AP entry  now if a line had AP line we would need to mod this sql
 --
