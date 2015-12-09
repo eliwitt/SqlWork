@@ -439,7 +439,7 @@ SELECT OLORNO, OLLINE, OLOQTY FROM SRBSOL WHERE OLORNO = |orderNumber| AND OLSTA
 --
 -- header
 --
-select * from vt2662aftt.mfmohr where aybmnb >= 10056620
+select * from vt2662afvp.mfmohr where aybmnb >= 10056620
 --
 -- update the Manufactor header to the correct status
 --
@@ -831,6 +831,17 @@ END AmtNumeric
 	max(u.northing) over (partition by u.open_to_public) n4
 from sqlpocket.upfall u;
 
+
+SELECT XML2CLOB(
+    XMLELEMENT(NAME "falls",
+        XMLAGG(xmlelement(name "fall", xmlattributes(m.id),
+            xmlelement(name "name", m.name),
+            xmlelement(name "desc", m.description)
+       )
+    ))) as theFalls
+    FROM upfall M
+fetch first 100 rows only
+
 ===========================  work on the dashboard ===============================
 --
 -- dashboard data
@@ -948,7 +959,7 @@ with FedOrders (customer, ordernu, linenu, picklst, tracknu, estddt, qty, desc, 
 select customer, ordernu, linenu, picklst, tracknu, estddt, qty, desc, ohcope as advertiser, design, oaname, oaadr1, oaadr2, oaadr3, oaadr4, oapocd from FedOrders
 	left join vt2662afvp.sroorsa on ordernu = oaorno and linenu = oaline
 	left join vt2662afvp.sroorshe on ordernu = ohorno
-where (oaname like 'CCO%') or (oaname like 'Clear%')
+where (oaname like 'CCO%') or (oaname like 'Clear%') or (oaname like 'clear%')
  order by customer, ordernu, linenu, picklst
 
 select  thorno, thplno, thcstrcn, thz3eddt from
@@ -1026,3 +1037,11 @@ select (select count(*) from vt2662afvp.sroofl where oflid2 in ('TS', 'TD') and 
 	 (select count(*) from vt2662afvp.sroofl where oflid2 = 'TD' and ofdate > 20151018 and ofline = 0) as TDNoline,
 	 (select count(*) from vt2662afvp.sroofl where oflid2 = 'TD' and ofdate > 20151018 and ofline > 0) as TDHasline
 from sysibm.sysdummy1
+
+===================================  XML work  ==========================================
+SELECT XML2CLOB(
+    XMLELEMENT(NAME "my_object",
+        XMLATTRIBUTES(M.Name AS "column_1", M.County_id)
+    )) as xml
+    FROM upfall M
+fetch first 100 rows only

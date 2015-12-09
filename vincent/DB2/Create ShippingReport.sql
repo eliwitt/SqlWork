@@ -16,7 +16,7 @@ with FedOrders (customer, ordernu, linenu, picklst, tracknu, estddt, qty, desc, 
 select customer, ordernu, linenu, picklst, tracknu, estddt, qty, desc, ohcope as advertiser, design, oaname, oaadr1, oaadr2, oaadr3, oaadr4, oapocd from FedOrders
 	left join vt2662afvp.sroorsa on ordernu = oaorno and linenu = oaline
 	left join vt2662afvp.sroorshe on ordernu = ohorno
-where (oaname like 'CCO%') or (oaname like 'Clear%')
+where (oaname like 'CCO%') or (oaname like 'Clear%') or (oaname like 'clear%')
  order by customer, ordernu, linenu, picklst;
 open Ship;
  return;
