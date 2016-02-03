@@ -200,7 +200,7 @@ where ohodat between 20110101 and 20111231 and boyvcd is not null order by olprd
 -- for the current year we use different columns and tables
 ---
 select * 
-into orders201501test
+into vpi.orders2015
 from
 openquery(vt2662afvp,'
 select distinct ohcuno, ohorno, olline, olscpr, ohodat, oloqty, olcqty, aya4nb, a0a3cd, ayprdc, boprdc, ayhatx
@@ -209,10 +209,10 @@ select distinct ohcuno, ohorno, olline, olscpr, ohodat, oloqty, olcqty, aya4nb, 
     left join vt2662afvp.mfmohr MFG on Oline.olorno = MFG.aybmnb and Oline.olline = MFG.aywdnb
     left join vt2662afvp.mfmoop Moop on MFG.aya4nb = Moop.a0a4nb and Moop.a0aqnb = 20
     left join vt2662afvp.mfcisa cfgparent on Oline.olprdc = cfgparent.boshce 
-where a0a2dt between 20150101 and 20150110 order by ohcuno, ohorno, olline')
+where a0a2dt between 20150101 and 20151231 order by ohcuno, ohorno, olline')
 -- opers
 select * 
- into opers201501test
+ into vpi.opers2015
 from
 openquery(vt2662afvp,'
 select distinct ohcuno, ohorno, olline, a0a4nb, a0aqnb, a0a3cd, a0a2dt as "Start Date", a0altm as "Start time", a0a3dt as "Completion date", a0aitm as "Completion time"
@@ -220,11 +220,10 @@ select distinct ohcuno, ohorno, olline, a0a4nb, a0aqnb, a0a3cd, a0a2dt as "Start
     left join vt2662afvp.sroorspl Oline on SOHdr.ohorno = Oline.olorno and Oline.olshpm <> ''FREIGHT''
     left join vt2662afvp.mfmohr MFG on Oline.olorno = MFG.aybmnb and Oline.olline = MFG.aywdnb
     left join vt2662afvp.mfmoop Moop on MFG.aya4nb = Moop.a0a4nb
-where a0a2dt between 20150101 and 20150110 order by ohcuno, ohorno, olline, a0a4nb, a0aqnb')
-
+where a0a2dt between 20150101 and 20151231 order by ohcuno, ohorno, olline, a0a4nb, a0aqnb')
 -- cfgitems
 select * 
- into cfgitems201501test
+ into vpi.cfgitems2015
 from
 openquery(vt2662afvp,'
 select distinct olprdc, boyvcd, boyxcd, boogqt
@@ -233,7 +232,7 @@ select distinct olprdc, boyvcd, boyxcd, boogqt
 	 left join vt2662afvp.mfmohr MFG on Oline.olorno = MFG.aybmnb and Oline.olline = MFG.aywdnb
 left join vt2662afvp.mfmoop Moop on MFG.aya4nb = Moop.a0a4nb
     left join vt2662afvp.mfcisa CfgItem on mfg.ayprdc = CfgItem.boshce
-where a0a2dt between 20150101 and 20150110 and boyvcd is not null order by olprdc, boyvcd')
+where a0a2dt between 20150101 and 20151231 and boyvcd is not null order by olprdc, boyvcd')
 
 
 --
@@ -290,7 +289,23 @@ select ohcuno as "Customer Number", ohorno as "Sales Order Nu", olline as "Sales
 		from combinedCfg group by CBprdc
 	) R on CB.CBRow = R.MaxRow and CB.CBprdc = R.CBprdc
 where ohorno in (10124940, 10124974) 
-
+--
+-- the pending order page retrieves a lot of data I provided a alternative
+--
+SELECT OHORNO, olorno, olline, olprdc, oloqty, oldano, olmotc,
+	case
+		when olline is null then 'false'
+		when olprdc is null then 'false'
+		when oloqty is null then 'false'
+		when oldano is null then 'false'
+		when olmotc is null then 'false'
+		when oloqty = 0 then 'false'
+		when oldano = 0 then 'false'
+	else 'true'
+	end complete
+	FROM vt2662aftt.SROORSHE hdr
+	left join vt2662aftt.SROORSPL line on hdr.ohorno = line.OLORNO
+WHERE OHCUNO = 'C00001' AND OHSTAT = '' AND OHORDS <= 10
 --
 --===========================  products =========================
 --
@@ -427,6 +442,12 @@ select ihrefx as iarefx, '', 'Size', '12x40' from VT2662AFtt.Z3OINDIH hdr where 
 insert  into VT2662AFTT.Z3OINDIA (iarefx, iacatc, iaatrt, iaattr) 
 select ihrefx as iarefx, '', 'Bus_Icon', 'Yes' from VT2662AFtt.Z3OINDIH hdr where ihorno = 10114450;
 
+--
+-- had to create entries
+--
+select 'insert into VT2662AFtt.Z3OINDIA values (' || iarefx  || ',' || ' (select max(iaatrn) from VT2662AFTT.Z3OINDIA where iarefx = ' || iarefx  || ') + 1, '''', ''JobNbr'', ''' || iaattr || ''''  from VT2662AFtt.Z3OINDIH hdr
+	left join VT2662AFtt.Z3OINDIA attrs on hdr.ihrefx = attrs.iarefx
+where ihorno between 10152783 and 10152979 and iaatrt = 'Board'
 
 --
 --===========================  manufacturer order header ==================
@@ -681,14 +702,23 @@ FROM qsys2.syscolumns WHERE system_column_name = 'F2PCKN' and system_table_schem
 'VT2662AFVP'
 
 ===========================  MS SQL Server tables ================================
-
+--
+--  insert a fav entry
+--
 insert into [dbo].[Favorites] (contactid, baseProduct, name, width, height, attributes, active)
 values(1842, 'WEB_JRB_CFG', 'Overflow test7', 50, 10, '<attributes>
   <attribute name="JR10" value="JR BOARD" />
 </attributes>', 1)
-
+--
+-- (de)active a fav entry  0=deactive 1=active
+--
 update [dbo].[Favorites] set [active] = 0 where [favoriteId] in (10190, 10191, 10192, 10193, 10194, 10195, 10196)
-
+--
+-- list a users fav
+--
+select * from Favorites 
+where contactId in (select contactid from Contacts where emailaddress like 'stevew%') and
+active = 1 order by name
 --
 --  check the order recorded status
 --
@@ -708,8 +738,21 @@ SELECT contactid, companyid, emailaddress, firstName, lastName
   FROM [VPI_Online].[dbo].[Contacts]
   WHERE contactid in (2470, 1958)
 
-============================  my schema  =========================================
+--To create the user on the new machine:
 
+CREATE LOGIN vincent 
+	WITH PASSWORD = N'$password', 
+	sid = $sid,
+	DEFAULT_DATABASE=[master], 
+	DEFAULT_LANGUAGE=[us_english], 
+	CHECK_EXPIRATION=OFF, CHECK_POLICY=OFF;
+GO
+
+-- * don't enclose the SID in quotes
+
+
+============================  my schema  =========================================
+--
 --date conversion pg 21
 --
 select u.id, monthname(u.confirmed_date) || ' ' || rtrim(char(day(u.confirmed_date))) || ',' || rtrim(char(year(u.confirmed_date))) confirmed, confirmed_date from upfall u;

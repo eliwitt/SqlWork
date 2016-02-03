@@ -47,7 +47,7 @@ where aya4nb in (
 
 /* update those that are stuck
 
-update  vt2662afvp.mfmohr set aybrnb = 3  where aya4nb in (
+update  vt2662afvp.mfmohr set aybrnb = aybrnb + 1  where aya4nb in (
 482733, 483792, 483835, 483836, 483869, 483886, 483890, 483910, 483911, 483929,
 483902, 483859, 483862, 483930, 483889, 483742, 483882, 483758, 483867, 483868,
 483915, 483578, 483757, 483925, 483787
