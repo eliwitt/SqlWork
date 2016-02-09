@@ -1011,7 +1011,7 @@ select  thorno, thplno, thcstrcn, thz3eddt from
 where evz3pstc = 'PU' and evz3evdt = 20151111
 order by thorno
 
-call vt2662ap.shippingreport;
+call vt2662ap.shippingreport(20160208);
 
 select olorno, olline, olplno, thz3eddt, olcuno, olords, aya4nb as "MFG NU", ayavst, aybrnb, aybpnb, thz3delv, thz3crrc, thz3pstc,
  	case
