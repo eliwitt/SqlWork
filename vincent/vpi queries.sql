@@ -419,6 +419,7 @@ select * from VT2662AFTT.Z3OINDIH
 --INSERT INTO VT2662AFTT/Z3OINDIA (IAREFX,IAATRN,IACATC,IAATRT,IAATTR) VALUES(|refx|,|atrn|,'|catc|','|atrt|','|attr|')
 select * from VT2662AFTT.Z3OINDIA
 
+select count(*) from  VT2662AFtt.Z3OINDIH where ihstat <> 9 and ihcrts > '2016-02-17 01:01:01.0001'
 
 select attrs.iaatrt, attrs.iaattr from VT2662AFtt.Z3OINDIH hdr
 	left join VT2662AFTT.Z3OINDIA attrs on hdr.ihrefx = attrs.iarefx
@@ -449,6 +450,12 @@ select 'insert into VT2662AFtt.Z3OINDIA values (' || iarefx  || ',' || ' (select
 	left join VT2662AFtt.Z3OINDIA attrs on hdr.ihrefx = attrs.iarefx
 where ihorno between 10152783 and 10152979 and iaatrt = 'Board'
 
+
+with OrdInfo (ordnu, ordline, ordcode, ordvalue) as 
+(
+select ttorno, ttline, ttytcd, ttforv from vt2662afvp.z3dr503a where (ttorno = 10157050 and ttline in (180, 230)) or (ttorno = 10158058 and ttline = 60) or (ttorno = 10154380 and ttline = 20) or (ttorno = 10158058 and ttline = 170) or (ttorno = 10160323 and ttline = 20) or (ttorno = 10159127 and ttline = 10)
+)
+select * from OrdInfo where ordcode like '%SF%'
 --
 --===========================  manufacturer order header ==================
 --
@@ -732,11 +739,36 @@ SELECT firstName + ' ' + lastname, orderNumber, lineNumber, [type], dateAdded, e
 FROM OrderStatusNotification notify
 	left join Contacts on notify.contactid = Contacts.contactid
 WHERE notify.companyid = 'C23952' order by orderNumber
+
+SELECT contactid, emailaddress, firstName, lastName, flags
+  FROM [VPI_Online].[dbo].[Contacts]
+  WHERE contactid in (2329)
+
+  update Contacts set flags = 'AE' WHERE contactid = 2329
 --....shows contactId 2470 as the ACCOUNT_EXEC.
 
 SELECT contactid, companyid, emailaddress, firstName, lastName
   FROM [VPI_Online].[dbo].[Contacts]
   WHERE contactid in (2470, 1958)
+
+  --   We have an issue where entries are create in the OrderStatusNotification table with
+  --   order numbers for users.  This causes their cureent order page to error
+  --
+  --  get the contact id of the user 
+select * from Contacts where emailaddress in (
+'adamlowney@clearchannel.com', 'markjacobsen@clearchannel.com', 'GeorgetteTadros2@clearchannel.com',
+'stevew@vincentprinting.com'
+)
+--  with the contact id look in the notification table
+--    Adam's id
+SELECT * FROM OrderStatusNotification where contactId = 1412 order by orderNumber desc
+--
+-- if there is a blank order number set the date field to 1900
+-- a blank order number in this table can cause the web to build a bad
+-- sql command and error out.
+--
+select * from  OrderStatusNotification where orderStatusNotificationId = 126808
+update OrderStatusNotification set dateAdded = '1900-01-01' where orderStatusNotificationId = 126808
 
 --To create the user on the new machine:
 
@@ -750,6 +782,10 @@ GO
 
 -- * don't enclose the SID in quotes
 
+--
+-- you can use this query to look for a string that starts with [
+-- 
+select * from mydata where mychar LIKE '[ [ ]%'
 
 ============================  my schema  =========================================
 --
@@ -1088,3 +1124,22 @@ SELECT XML2CLOB(
     )) as xml
     FROM upfall M
 fetch first 100 rows only
+
+
+======================= reset MO ===================
+--
+--   Order aybmnb  Line aywdnb
+--
+update vt2662aftt.mfmohr 
+	set ayavst = 20, aybpnb = 0, aybkcd = '', aybrnb = 0 
+where aybmnb = 10059791 and aywdnb = 20;
+update VT2662AFTT.mfmoop
+	set a0a2dt = 0, a0a3dt = 0, a0a4st = 0
+where a0a4nb = 293039 and a0aqnb = 10;
+
+
+	select * from vt2662aftt.mfmohr where aybmnb = 10059791;
+select * from VT2662AFTT.mfmoop where a0a4nb = 293038;
+
+select * from vt2662aftt.mfmohr where aybmnb = 10059752;
+select * from VT2662AFTT.mfmoop where a0a4nb = 293032;

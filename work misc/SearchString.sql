@@ -1,0 +1,1 @@
+select * from mydata where mychar LIKE '[ [ ]%'
