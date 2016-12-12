@@ -307,6 +307,16 @@ SELECT OHORNO, olorno, olline, olprdc, oloqty, oldano, olmotc,
 	left join vt2662aftt.SROORSPL line on hdr.ohorno = line.OLORNO
 WHERE OHCUNO = 'C00001' AND OHSTAT = '' AND OHORDS <= 10
 --
+--==========================  quotation =========================
+--
+--  quote header
+select * from vt2662aftt.sroquh where qhquno = 70014
+update vt2662aftt.sroquh set qhstat = 'D' where qhquno = 70014
+--  quote line
+select * from vt2662aftt.sroqupl where qlquno = 70005
+update vt2662aftt.sroqupl set qlstat = 'D' where qlquno = 70005
+
+--
 --===========================  products =========================
 --
 -- products
@@ -1035,7 +1045,9 @@ with FedOrders (customer, ordernu, linenu, picklst, tracknu, estddt, qty, desc, 
 			where evz3pstc = 'PU' and evz3evdt = 20151111)
 		left join VT2662AFvp.SRoorspl on thorno = olorno and thplno = olplno
 )
-select customer, ordernu, linenu, picklst, tracknu, estddt, qty, desc, ohcope as advertiser, design, oaname, oaadr1, oaadr2, oaadr3, oaadr4, oapocd from FedOrders
+select customer, ordernu, linenu, picklst, tracknu, estddt, qty, desc, 
+	ohcope as advertiser, design, oaname, oaadr1, oaadr2, oaadr3, oaadr4, oapocd 
+	from FedOrders
 	left join vt2662afvp.sroorsa on ordernu = oaorno and linenu = oaline
 	left join vt2662afvp.sroorshe on ordernu = ohorno
 where (oaname like 'CCO%') or (oaname like 'Clear%') or (oaname like 'clear%')
