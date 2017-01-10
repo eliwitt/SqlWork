@@ -88,7 +88,10 @@ SELECT OHORNO, ohcuno, ohcope, olline, olprdc, oldesc, gtdctt, gttx70
 	else (SELECT adname FROM VT2662AFvp.SRBNAD WHERE ADNUM = olcuno and  adadno = OLDANO)
 	end Addr
 from VT2662AFvp.SRoorspl where olorno = 10117767;
-
+--
+-- the web uses the following
+--
+SELECT * FROM VT2662AFvp.SRBNAD WHERE ADNUM = 'C00001' AND ADAD01 = 'Y' ORDER BY ADADNO
 --
 -- sales data that got corupt by the Forward Maintenance prgr
 --
@@ -131,6 +134,10 @@ select ohcope, ohorno, ohmotc, ohmott, thcstrcn,  thz3evdt
 FROM VT2662AFvp.SROORSHE sheader
 left join VT2662AFVP.Z3OPTRH ship on sheader.ohorno = ship.THORNO
 WHERE THORNO in (10111430, 10111275) and ohmotc = 'VPI' and  thstat <> 'D';
+
+select * from vt2662afvp.sroorshe hdr
+	left join vt2662afvp.sroorspl line on hdr.ohorno = line.olorno
+where ohcuno = 'C00069' and ohstat <> 'D' and ohcope like '%YMCA%' and oldesc like '%Clip%'
 --
 -- package types(a.k.a. Box Sizes)
 --
@@ -769,6 +776,15 @@ select * from Contacts where emailaddress in (
 'adamlowney@clearchannel.com', 'markjacobsen@clearchannel.com', 'GeorgetteTadros2@clearchannel.com',
 'stevew@vincentprinting.com'
 )
+--
+-- locate contacts based on the companyid
+--
+SELECT *
+  FROM Contacts
+where companyid like '%!,%' escape '!'
+--where companyid like '%C02120%' or companyid like '%C00002%'
+
+
 --  with the contact id look in the notification table
 --    Adam's id
 SELECT * FROM OrderStatusNotification where contactId = 1412 order by orderNumber desc
