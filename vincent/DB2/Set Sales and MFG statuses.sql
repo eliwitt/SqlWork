@@ -1,4 +1,15 @@
+--
+-- an order was created that had several line that where processed by a 3rd party
+--
+--  Thank god the order lines had pick list number with them so I inserted fedex rows for those lines
+--
+SELECT * FROM table(VTCUSTOM.udtf0001t('C01803',20161201,20161229,'C', '' )) as t where ordqty > 0 and ordno = 10178811
 
+insert into vt2662afvp.z3optrh (thz3crrc, thcstrcn, thz3delv, thz3evdt, thz3evtm, thplno, thorno, thline)
+values('FEDEX', 'delivered 12/28 override', ' ', 20161228, 150730, 2237429, 10178811, 20)
+
+-----------------------------------------------------------------------------------------------------------------
+--
 -- locate the planner view order
 --  10171209
 Select AYA4NB,OHORDT,OHODAT,AYA0DT,AYBMNB,OLTODC,ohords,OLMOTC,OHNAME,OHCOPE,OLSHPM,OANAME,OAADR1,
