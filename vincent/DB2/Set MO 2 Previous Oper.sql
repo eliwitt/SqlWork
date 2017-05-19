@@ -1,3 +1,12 @@
+-- 
+--  reset a mo to a previous operation
+--
+-- view the mo header
+--
+select * from vt2662afvp.mfmohr where aybmnb = 10190380;
+--
+-- view the order status
+--
 select distinct olstat, olorno, olline, olprdc, olcuno, olords, aya4nb as "MFG NU", ayavst, aybrnb, aybpnb, thz3delv, thz3crrc, thz3pstc,
  	case
 		when olords = 10 then '00500-Not Confirmed'
@@ -30,6 +39,14 @@ select distinct olstat, olorno, olline, olprdc, olcuno, olords, aya4nb as "MFG N
 from vt2662afvp.sroorspl OLine
 	left join vt2662afvp.mfmohr MFG on Oline.olorno = MFG.aybmnb and Oline.olline = MFG.aywdnb
 	left join vt2662afvp.z3optrh FedHdr on OLine.OLorno = FedHdr.Thorno and OLine.olline = FedHdr.THline and thstat <> 'D'
-where olorno in (10179590, 10179592, 10179819, 10181043, 10181235, 10181515, 10181528, 10182239, 10182654, 10182737, 10183659, 
-10183750, 10183832, 10184092, 10184333, 10184505, 10184504, 10184546, 10184549, 10184550) 
+where olorno in (10190380) 
 order by olorno, olline
+--
+--  once you found the mo and operation that needs to be reset
+--
+--  clear the operation
+update  vt2662afvp.mfmoop set a0a2dt = 0, a0a3dt = 0, a0a4st = '' where a0a4nb = 564100 and a0aqnb = 20;
+--
+-- back the header up to the centre, operation number and nuber complete.
+--
+update  vt2662afvp.mfmohr set aybrnb = 3, aybkcd = 'ART', aybpnb = 18  where aya4nb = 564100;

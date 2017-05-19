@@ -36,3 +36,13 @@ select * from VT2662AFVP.mfmoop where a0a4nb = 526767
 
 -- set the moop entries 
 update  vt2662afvp.mfmoop set a0a2dt = 20160826, a0a3dt = 20160826, a0a4st = 60  where a0a4nb = 526767 and a0aqnb > 10
+-- reset a mo operation
+update  vt2662afvp.mfmoop set a0a2dt = 0, a0a3dt = 0, a0a4st = '' where a0a4nb = 563023 and a0aqnb = 10;
+
+
+-- aaron's fat finger
+update  vt2662afvp.mfmoop set a0a2dt = 20170428, a0a3dt = 20170428 where a0a4nb = 562969 and a0aqnb = 10;
+
+update  vt2662afvp.mfmohr set aybrnb = aybrnb + 1  where aya4nb in (
+562969
+)

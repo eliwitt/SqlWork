@@ -314,6 +314,16 @@ SELECT OHORNO, olorno, olline, olprdc, oloqty, oldano, olmotc,
 	left join vt2662aftt.SROORSPL line on hdr.ohorno = line.OLORNO
 WHERE OHCUNO = 'C00001' AND OHSTAT = '' AND OHORDS <= 10
 --
+-- related tables
+--
+select distinct olorno, olline, olplno, oldlvd, aya4nb, a0astx, a0a3dt, thcstrcn, evz3evdt,evz3evtm from vt2662afvp.sroorspl Oline
+left join vt2662afvp.mfmohr MFG on Oline.olorno  = MFG.aybmnb and Oline.olline = MFG.aywdnb
+left join vt2662afvp.mfmoop Moop on MFG.aya4nb = Moop.a0a4nb and Moop.a0aqnb = 15
+left join vt2662afvp.z3optrh FexHdr on OLine.olorno = FexHdr.thorno and OLine.olplno = thplno
+left join vt2662afvp.z3optrd FexDlt on FexHdr.thcstrcn = FexDlt.evcstrcn and FexDlt.evz3pstc = 'PU'
+where olorno = 10181644
+
+--
 --==========================  quotation =========================
 --
 --  quote header
@@ -453,6 +463,15 @@ where ihorno = 10114450;
 -- update the hdr status
 update VT2662AFtt.Z3OINDIH set ihstat = '0' where ihorno in (10114450);
 
+--Update CB MOs
+update VT2662AFtt.Z3OINDIH 
+SET IHSTAT = 0 
+where ihbcnb in (
+select ihbcnb from VT2662AFtt.Z3OINDIH hdr
+    left join VT2662AFTT.Z3OINDIA attrs on hdr.ihrefx = attrs.iarefx
+where  (ihbcnb > 563891 and ihbcnb < 564787)  and iaattr in('CDP','DTCND')
+)
+
 
 --  insert rows to the attrs for the WO
 insert  into VT2662AFTT.Z3OINDIA (iarefx, iacatc, iaatrt, iaattr) 
@@ -526,6 +545,16 @@ select * from VT2662AFTT.mfmoop where a0a4nb = 291014
 -- operations history
 select * from VT2662AFTT.mfmooy where a4a4nb = 291014
 --
+--
+-- the MO hdr, oper, and text relationship
+--
+select aybmnb, a0aqnb, a0a3cd, gttx70
+from vt2662afvp.mfmohr  hdr 
+	left join VT2662AFvp.mfmoop oper on hdr.aya4nb = oper.a0a4nb
+	left join vt2662afvp.srotgt motxt on oper.a0txky = motxt.gttxky
+where aybmnb = 10144577 order by a0aqnb 
+--
+--
 --========================  fedex data  ==========================
 --
 -- configurator transit method
@@ -561,6 +590,13 @@ update VT2662AFTT.Z3OPTRH set thstat = 'D'	 where VT2662AFTT.Z3OPTRH.THORNO = 10
 -- find all orders within a given date range
 --
 SELECT * FROM table(VTCUSTOMTT.udtf0001t('C05771',20131220,20140306,'C', '' )) as t where ordqty > 0
+--
+--
+--=================================Planner View ====================
+--
+-- work centre list for Plannerview
+-- using a view
+select * from vt2662afvp.mfwcfll1 where aiqpst = '1' order by 1
 --
 --================================== spreadsheet ===================
 --
@@ -618,8 +654,16 @@ left join vt2662afvp.srbctlsd SigSales on SNam.naarha = SigSales.ctsign
 left join vt2662afvp.srbctlsd SigCSR on SInfo.noshan = SigCSR.ctsign	
 left join vt2662afvp.sronfp Phone on SNam.nanum = Phone.nfnano and nfdesc = 'Company phone'
 where nanum like 'C%'and nacrdt > 20140801 order by nanum
-
-
+--
+-- biz partner and a/r customer file
+--
+select * from vt2662afvp.sronam where nanum = 'C05771';
+select * from vt2662afvp.srocma where cmcuno = 'C05771';  -- this table CMCRST is for credit stops
+--
+-- Trading Partner Documents - DI information such as Integrator handler and invoice email addresses
+--
+select * from vt2662afvp.srotpd where emnum = 'C00001'
+--
 -- lookup using the internal name
 --
 select nanum as "Customer No", naname as "Account Name"
@@ -813,6 +857,17 @@ GO
 -- 
 select * from mydata where mychar LIKE '[ [ ]%'
 
+--- Linked server tables
+--
+-- Customer - Sales Order Info  SRONOI
+--
+-- User Profile SROUSP
+--
+SELECT nonum, noshan, updesc 
+FROM vt2662afvp.s10a3a30.vt2662afvp.sronoi SInfo
+	left join vt2662afvp.s10a3a30.vt2662afvp.srousp ibsuser on SInfo.noshan = ibsuser.uphand
+
+select * from vt2662afvp.s10a3a30.vt2662afvp.srousp
 ============================  my schema  =========================================
 --
 --date conversion pg 21
@@ -1144,6 +1199,14 @@ select (select count(*) from vt2662afvp.sroofl where oflid2 in ('TS', 'TD') and 
 	 (select count(*) from vt2662afvp.sroofl where oflid2 = 'TD' and ofdate > 20151018 and ofline = 0) as TDNoline,
 	 (select count(*) from vt2662afvp.sroofl where oflid2 = 'TD' and ofdate > 20151018 and ofline > 0) as TDHasline
 from sysibm.sysdummy1
+
+
+select oforno, ofline, 1 as serial, oflid2, max(ofdate) date, max(oftime) time from vt2662afvp.sroofl where oforno = 10181644 and oflid2 = 'OC' group by oforno, ofline, oflid2
+union
+select oforno, ofline, 2 as serial, oflid2, max(ofdate) date , max(oftime) time from vt2662afvp.sroofl where oforno = 10181644 and oflid2 = 'AP' group by oforno, ofline, oflid2
+union
+select oforno, ofline, 3 as serial, oflid2, max(ofdate) date , max(oftime) time from vt2662afvp.sroofl where oforno = 10181644 and oflid2 = 'TS' group by oforno, ofline, oflid2
+order by oforno, ofline, serial, oflid2 desc, date, time
 
 ===================================  XML work  ==========================================
 SELECT XML2CLOB(

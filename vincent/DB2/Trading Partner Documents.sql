@@ -1,0 +1,1 @@
+select * from vt2662afvp.srotpd where emnum = 'C00001'
