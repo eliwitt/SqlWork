@@ -1,0 +1,2 @@
+select * from VT2662AFVP.mfmoop where a0a4nb = 235646;
+select ohorno, ohords from vt2662afvp.sroorshe where ohorno  in (10027907, 10027908, 10027910, 10032185, 10036064, 10096787, 10096762, 10178444, 10184452) ;

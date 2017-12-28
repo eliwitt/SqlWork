@@ -1,0 +1,1 @@
+select * from vt2662afvp.z3ouilog where ulorno = 10200951
