@@ -20,7 +20,15 @@ From VTCUSTOM.IBSSTATA
 where ohorno in (10171209, 10171242) 
 
 -- set the status on the hdr
-update  vt2662afvp.sroorshe set ohords = 60  where ohorno = 10171209
+-- planner view does not look at ohstat and this causes trouble
+-- so I have to set the ohords and olords to 60  because the system
+-- does not set them if you delete the record
+--
+update  vt2662afvp.sroorshe set ohords = 60  where ohorno = 10209283
+--
+-- lines too
+--
+update  vt2662afvp.sroorspl set olords = 60  where olorno = 10209283
 
 -- look at common orders
 --
@@ -28,7 +36,10 @@ select aya4nb, ayavst, aybmnb, aywdnb, ayaavn, ayprdc, aybpnb, aybkcd, aybrnb
 from vt2662afvp.mfmohr where aya4nb in (526767, 526828) order by aya4nb
 
 -- set the mfg hdr 
-update  vt2662afvp.mfmohr set set ayavst = 10, aybrnb = 0, aybkcd = '', aybpnb = 0, aya2dt = 0  where aya4nb = 526767
+update  vt2662afvp.mfmohr set ayavst = 10, aybrnb = 0, aybkcd = '', aybpnb = 0, aya2dt = 0  where aya4nb = 
+
+-- set the hdr to 20 on stuck mo
+update  vt2662afvp.mfmohr set ayavst = 20  where aya4nb =
 
 -- set the status on the order line
 update  vt2662afvp.sroorspl set olords = 60  where olorno = 10171209 and olline = 10 

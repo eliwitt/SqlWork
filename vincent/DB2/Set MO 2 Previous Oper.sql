@@ -47,6 +47,10 @@ order by olorno, olline
 --  clear the operation
 update  vt2662afvp.mfmoop set a0a2dt = 0, a0a3dt = 0, a0a4st = '' where a0a4nb = 564100 and a0aqnb = 20;
 --
+-- fro some reason the header is not getting set when the MO is created.  this update will set the mo to the correct status
+--
+update  vt2662afvp.mfmohr set ayavst = 20  where aya4nb = 598243;
+--
 -- back the header up to the centre, operation number and nuber complete.
 --
 update  vt2662afvp.mfmohr set aybrnb = 3, aybkcd = 'ART', aybpnb = 18  where aya4nb = 564100;

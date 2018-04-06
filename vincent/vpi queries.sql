@@ -344,6 +344,10 @@ SELECT JWPRDC, JWZLCD FROM VT2662AFTT.MFCITEL1 WHERE JWPRDC LIKE 'WEB_%' AND JWS
 --
 SELECT * FROM VT2662AFTT.MFCIATL0
 --
+-- cfg atr
+--
+SELECT * FROM VT2662AFTT.MFCatr where jnyvcd like 'BU%'
+--
 -- con items
 --
 SELECT * FROM VT2662AFTT.MFCitel0 where jwprdc = 'WEB_BUL_CFG';
@@ -360,6 +364,9 @@ select * from vt2662aftt.z3dr503a where ttorno = {ordno}
 
 
 SELECT * FROM VT2662AFTT.MFCIATL1 where jyprdc ='WEB_FLS_CFG';
+--
+-- parameter table
+--
 SELECT * FROM vt2662aftt.MFCPATL2 
 	 where jpzlcd in (select jyzlcd from  VT2662AFTT.MFCIATL1 where jyprdc ='WEB_FLS_CFG');
 
@@ -398,7 +405,10 @@ SELECT * FROM VT2662AFTT.SROOFL WHERE OFSTAT = 'P'
 --# Clear processed events
 --
 UPDATE VT2662AFTT.SROOFL SET OFSTAT = ''
-
+--
+--  Log Point contain the events code and description
+--
+select * from vt2662afvp.sroctllp
 
 --
 -- look at the user defined table entries
@@ -422,6 +432,25 @@ order by ciuece, ciufce;
 --update vt2662afvp.mfudtd set cixsqt = .35 where ciubce = 'WOCUSTPRIC' and ciufce in ( 'C00260', 'C00333', 'C00167', 'C00067', 'C00069') 
 --	and ciuece in ('7 OZ', 'PE');
 --	
+-- create a copy of the schema for MFUDTD in STEVEWORK
+--
+CREATE TABLE UserPrices AS (
+    SELECT *
+    FROM vt2662aftt.mfudtd
+) WITH NO DATA
+--
+--copy the data from MFUDTD
+--
+insert into userprices select * from vt2662aftt.mfudtd;
+
+insert into userprices select ciubce, ciagdt, '7 OZ BB', cixqqt, ciufce, cixrqt, cixsqt, ciaavn, ciabts from userprices where ciubce = 'WBU70' and ciuece = '7 OZ';
+
+select * from vt2662afvp.mfudtd where ciubce = 'WBU80' order by ciuece, ciufce;
+-- tt data
+select * from userprices where ciubce = 'WBU70' and ciuece like '7 OZ%'
+-- vp data 
+select * from userprices where ciubce = 'WOCUSTPRIC' and ciuece like '7 OZ%'
+--
 -------------------- order header--he and line--pl  ----------
 --	
 SELECT * FROM VT2662AFTT.SROORSHE WHERE OHORNO >= 10056620

@@ -1,0 +1,1 @@
+select table_schema || '.' || table_name from qsys2.systables where table_type = 'T'

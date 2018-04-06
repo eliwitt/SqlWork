@@ -53,4 +53,10 @@ update  vt2662afvp.mfmohr set aybrnb = aybrnb + 1  where aya4nb in (
 483915, 483578, 483757, 483925, 483787
 )
 
+For some reason art lines get screwed up so I have to set their stati
+
+update  vt2662afvp.sroorspl set olords = 45 where (olorno=10206205 and olline = 40) or 
+(olorno=10206284 and olline = 20) or (olorno=10206317 and olline = 40) or
+(olorno=10206759 and olline = 40)
+
 */

@@ -1,3 +1,9 @@
+--  statements to handle the pricing tables
+--
+select * from vt2662afvp.mfudtd where ciubce = 'WOCUSTPRIC' and ciufce = 'C01298'
+union
+select * from vt2662afvp.mfudtd where ciubce = 'TRIWPRICE' and ciufce = 'C01298';
+
 --select * from vt2662afvp.mfudtd where ciubce = 'WOCUSTPRIC' and ciuece = '7 OZ'
 --select * from vt2662aftt.mfudtd where ciubce = 'WBU70' and ciuece = 'Rigid Vinyl';
 --insert into vt2662aftt.mfudtd (ciubce, ciagdt, ciuece, ciufce, cixsqt) values('WBU70','20140529','RIGID VINYL','C00001', 1.10),('WBU70','20140529','SAV','C00001', 2.12)
